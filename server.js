@@ -5,7 +5,7 @@ const connectDB = require('./dbConnection');
 
 // new change
 
-connectDB();
+connectDB()
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
