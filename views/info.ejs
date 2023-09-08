@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bartering System</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2? family=Josefin+Slab&family=Karla&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather">
+</head>
+
+<body>
+    <div class="font2 bg" align="center">
+        Welcome to the Bartering System
+    </div>
+    <div class="container">
+        <!-- nav bar -->
+        <nav class="my-2">
+            <form action="/search" method="GET" class="d-flex gap-2">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="term">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="nav nav-pills nav-fill my-3">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/home">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/item">ITEMS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/info">INFO</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <div class="dropdown">
+                        <% if (user) { %>
+                            <a href="/profile" class="nav-link">Welcome, <%= user.name %></a>
+                            <% } else { %>
+                                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false" data-bs-auto-close="outside">
+                                    SIGN IN
+                                </button>
+                                <form class="dropdown-menu p-4" method="post" action="/login" style="min-width: 340px;">
+                                    <div class="mb-3">
+                                        <label for="Email" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="Email" name="email"
+                                            placeholder="email@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="Password" name="password"
+                                            placeholder="Password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                                            <label class="form-check-label" for="dropdownCheck">
+                                                Remember me
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Sign in</button>
+                                        <button type="button" class="btn btn-primary"
+                                            id="registerButton">Register</button>
+                                    </div>
+                                </form>
+                                <% } %>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <!-- nav bar end -->
+
+        <hr>
+        <main class="my-5 font3">
+            <!-- About -->
+            <h1 align="center" id="About">Our Story</h1>
+            <p class="my-5 lead">Hi, We are the Vegetable Dog Team. Our barting system website is located here. We have
+                a great
+                opportunity to create our own website. Our adventure started with a common goal: to try our best to make
+                this website. We made this concept a reality through countless cups of coffee, brainstorming meetings,
+                and late-night coding marathons. Our platform is more than simply a website; it is a symbol of our
+                commitment, a manifestation of our enthusiasm, and — most importantly — This has further deepened our
+                understanding of teamwork. We appreciate you coming along for the journey. Together, let's trade, save,
+                and sustain!</p>
+
+            <!-- FAQs -->
+            <h1 align="center" class="my-5" id="FAQs">FAQs</h1>
+            <h4>Question: What is a barting system?</h4>
+            <ul>
+                <li>Answer: A barting system is an online platform where users can exchange goods or services without
+                    the use of money.</li>
+            </ul>
+            <h4>Question: How do I list my items for exchange?</h4>
+            <ul>
+                <li>Answer: You can list your items by creating an account, logging in, and following the steps to
+                    upload the item details and images.</li>
+            </ul>
+            <h4>Question: How do I find items I want to exchange for?</h4>
+            <ul>
+                <li>Answer: You can search for items using the search function on the website, or you can browse through
+                    the categories to find items that interest you.</li>
+            </ul>
+            <h4>Question: Is there a fee for using the barting system?</h4>
+            <ul>
+                <li>Answer: Our barting system is free to use for both listing and exchanging items.</li>
+            </ul>
+            <h4>Question: How do I ensure my privacy when exchanging items?</h4>
+            <ul>
+                <li>Answer: Our platform allows you to exchange contact and shipping information privately with the
+                    other party involved in the trade.</li>
+            </ul>
+
+            <!-- Contact Us -->
+            <h1 align="center" class="my-5" id="ContactUs">Contact Us</h1>
+            <form class="needs-validation" action="/feedback" method="post" novalidate>
+                <h3>SEND US EMAIL</h3>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="Email" name="email" placeholder="name@example.com"
+                        required>
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="Name" name="name" required>
+                    <div class="invalid-feedback">Name cannot be empty.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="Phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="Phone" name="phone" placeholder="0400 000 000" required>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="Text" class="form-label">Message</label>
+                    <textarea class="form-control" id="Text" name="message" rows="4"></textarea>
+                </div>
+                <div align="right">
+                    <button type="submit" class="btn btn-dark mb-3 col-12">SEND</button>
+                </div>
+            </form>
+
+        </main>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="../script.js"></script>
+</body>
+
+<footer class="font3 fs-6" align="center">
+    <div class="container">
+        <hr>
+        <table class="table table-borderless">
+            <tr>
+                <th scope="col"><a href="/info#ContactUs" class="black">Contact Us</a></th>
+                <th scope="col"><a href="/info#About" class="black">About</a></th>
+                <th scope="col"><a href="/info#FAQs" class="black">FAQs</a></th>
+            </tr>
+        </table>
+        <p> &copy; Website designed by Vegetable Dog Team. Last updated 18/08/2023.</p>
+    </div>
+</footer>
+
+</html>
