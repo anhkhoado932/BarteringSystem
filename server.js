@@ -3,8 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
 
-// new change
-
 connectDB()
 
 app.use(bodyParser.urlencoded({ extended: true }));
