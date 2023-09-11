@@ -46,6 +46,11 @@
     <body>
         <div class="font2 bg" align="center">TRANSACTION PAGE</div>
         <div class="container transaction-container mt-5">
+            <div class="row header">
+                <div class="col-2"><b>Transaction</b></div>
+                <div class="col"><b>Details</b></div>
+            </div>
+
             <!--             <ul class="nav nav-pills nav-fill my-3">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/home">HOME</a>
@@ -98,7 +103,33 @@
                 </li>
             </ul> -->
             <div class="row h-100">
-                <div class="col-2 transaction-list">haha</div>
+                <div class="col-2 transaction-list">
+                    <% if (transactions) { %> 
+                        <% transactions.forEach((transaction)=> { %>
+                        <div class="transaction-list-item">
+                            <% if (transaction.status == "active") { %>
+                                <span class="transaction-indicator" style="background-color: rgb(255, 196, 0)"></span>
+                            <% } else if (transaction.status == "finished") { %>
+                                <span class="transaction-indicator" style="background-color: green"></span>
+                            <% } else if (transaction.status == "interrupted") { %>
+                                <span class="transaction-indicator" style="background-color: grey"></span>
+                            <% } %>
+                            <div class="rounded-circle border d-flex justify-content-center align-item-center avatar">
+                            TODO
+                            </div>
+                            <div class="d-flex align-item-center">
+                                <% if (transaction.user1.name == user.name) { %>
+                                    <b><%= transaction.user2.name %></b>
+                                <% } else  { %>
+                                    <b><%= transaction.user1.name %></b>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% }) %> 
+                    <% } else { %> 
+                        There are no transactions... 
+                    <% } %>
+                </div>
                 <div class="col-7 transaction-chatbox hidden"></div>
                 <div class="col transaction-info">
                     <button id="view-message-btn">collapse</button>
