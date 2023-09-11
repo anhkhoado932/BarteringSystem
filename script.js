@@ -32,17 +32,33 @@ $(document).ready(function () {
 
 function onOpeningChatbox() {
     // Chatbox
-    const chatbox = $(".transaction-chatbox");
-    // TODO: fetch data, spin on wait, show on display
-    // chatbox.html(`
-    // <div class="d-flex justify-content-center">
-    // <div class="spinner-border" role="status">
-    // <span class="sr-only"></span>
-    // </div>
-    // </div>
-    // `);
-    chatbox.html(`<div class="chatbox"></div>`);
     socket.emit("start-message", {});
+
+    const chatboxContainer = $(".transaction-chatbox");
+    jQuery.ajax({
+        url: "/message?transactionId=&page=0",
+        type: "GET",
+        beforeSend: function () {
+            chatboxContainer.html(`
+                <div class="chatbox d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            `);
+        },
+        complete: function (data) {
+            chatboxContainer.html(`
+            <div class="chatbox"></div>
+            <div class="input-group mb-3">
+                <input type="text" class="chatbox-input form-control" placeholder="type here..." aria-label="type here..." aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary chatbox-send" type="button">Send</button>
+                </div>
+            </div>
+            `);
+        },
+    });
 
     // Detail
     const messageBtn = $("#toggle-message-btn");
@@ -50,12 +66,15 @@ function onOpeningChatbox() {
         <i class="bi bi-chevron-double-left"></i>
         View Details
     `);
-    $(".transaction-details-items .col").each(function () {
-        $(this).addClass("col-12");
-    });
-    $(".transaction-details-items .col.trade-icon").html(
-        '<i class="bi bi-arrow-down-up" style="font-size: 30px"></i>'
-    );
+    c;
+    setTimeout(() => {
+        $(".transaction-details-items .col").each(function () {
+            $(this).addClass("col-12");
+        });
+        $(".transaction-details-items .col.trade-icon").html(
+            '<i class="bi bi-arrow-down-up" style="font-size: 30px"></i>'
+        );
+    }, 100);
 }
 
 function onClosingChatbox() {
@@ -68,40 +87,46 @@ function onClosingChatbox() {
         <i class="bi bi-chevron-double-right"></i>
         View Chat
     `);
-    $(".transaction-details-items .col").each(function () {
-        $(this).removeClass("col-12");
-    });
-    $(".transaction-details-items .col.trade-icon").html(
-        '<i class="bi bi-arrow-left-right" style="font-size: 50px"></i>'
-    );
+
+    setTimeout(() => {
+        $(".transaction-details-items .col").each(function () {
+            $(this).removeClass("col-12");
+        });
+        $(".transaction-details-items .col.trade-icon").html(
+            '<i class="bi bi-arrow-left-right" style="font-size: 50px"></i>'
+        );
+    }, 100);
 }
 
 $(document).ready(function () {
     socket.on("message", (data) => {
         const { type, content } = data.message;
-        const chatbox = $(".transaction-chatbox .chatbox");
 
-        let element;
+        let newMesssage;
         if (type == "emoji") {
-            element = `<div class="from-them">${content}</div>`;
+            newMesssage = `<p class="from-them">${content}</p>`;
         } else if (type == "image") {
-            element = `<div class="from-them">Unsupported</div>`;
+            newMesssage = `<p class="from-them">Unsupported</p>`;
         } else {
-            element = `<div class="from-them">${content}</div>`;
+            newMesssage = `<p class="from-them">${content}</p>`;
         }
-        chatbox.append(element);
+        appendAndScroll($(".chatbox"), newMesssage);
     });
 });
 
 $(document).ready(function () {
-    $("chatbox-submit").on("submit", function (event) {
+    $("chatbox-send").on("submit", function (event) {
         event.preventDefault();
-        const newMessage = $("chatbox-textarea").val();
+        const newMessage = $("chatbox-input").val();
         socket.emit("message", newMessage);
 
-        $("chatbox-textarea").val("");
-        $(".transaction-chatbox .chatbox").append(
-            `<div class="from-them">${content}</div>`
-        );
+        $("chatbox-input").val("");
+        appendAndScroll($(".chatbox"), `<p class="from-them">${content}</p>`);
     });
 });
+
+function appendAndScroll(element, content) {
+    element
+        .append(content)
+        .animate({ scrollTop: element.prop("scrollHeight") }, 200);
+}

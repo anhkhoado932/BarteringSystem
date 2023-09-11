@@ -180,6 +180,7 @@ a:hover {
     padding: 0px !important;
 }
 
+.transaction-details-barterer.hidden,
 .transaction-details-progress.hidden {
     display: none;
 }
@@ -191,15 +192,15 @@ a:hover {
 
 .chatbox {
     background-color: #fff;
-    border: 1px solid #e5e5ea;
-    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    font-family: "SanFrancisco";
-    font-size: 1.25rem;
     margin: 0 auto 1rem;
-    max-width: 600px;
     padding: 0.5rem 1.5rem;
+    max-width: 100%;
+    width: 100%;
+    max-height: 500px;
+    height: 500px;
+    overflow: auto;
 }
 
 .chatbox p {
@@ -290,25 +291,3 @@ p[class^="from-"].emoji::before {
 .no-tail::before {
     display: none;
 }
-
-/* 
-@media screen and (max-width: 800px) {
-    body {
-        margin: 0 0.5rem;
-    }
-
-    .container {
-        padding: 0.5rem;
-    }
-
-    .chatbox {
-        font-size: 1.05rem;
-        margin: 0 auto 1rem;
-        max-width: 600px;
-        padding: 0.25rem 0.875rem;
-    }
-
-    .chatbox p {
-        margin: 0.5rem 0;
-    }
-} */
