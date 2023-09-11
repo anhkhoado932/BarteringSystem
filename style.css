@@ -119,6 +119,7 @@ a:hover {
 }
 
 .transaction-list {
+    border-right: 1px solid #d1d1d1;
     padding: 0;
 
     .transaction-list-item {
@@ -152,9 +153,16 @@ a:hover {
 
 .transaction-chatbox {
     transition: width 100ms;
+    border-right: 1px solid #d1d1d1;
 }
 
-.transaction-details {
+#toggle-message-btn {
+    margin-top: 10px;
+    border-color: black;
+}
+
+.transaction-details-items {
+    padding: 0;
 }
 
 .trade-item1,
