@@ -23,7 +23,7 @@ app.use(express.json());
 app.use('/', viewRoutes);
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
-app.use('transaction', transactionRoutes);
+app.use('/transaction', transactionRoutes);
 
 // Static files
 app.use(express.static(__dirname + '/public'));
