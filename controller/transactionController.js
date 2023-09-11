@@ -6,7 +6,7 @@ exports.getTransaction = (req, res) => {
     const { _id } = req.session.user;
     transactionModel
         .find({
-            $or: [{ userId1: _id }, { userId2: _id }],
+            $or: [{ user1: _id }, { user2: _id }],
         })
         .then((transaction) => {
             res.status(200).send(transaction);
@@ -19,13 +19,13 @@ exports.getTransaction = (req, res) => {
 exports.insertTransaction = async (req, res) => {
     const productId1 = new ObjectId(req.body['productId1']);
     const productId2 = new ObjectId(req.body['productId2']);
-    const product1 = await productModel.findById(productId1);
-    const product2 = await productModel.findById(productId2);
+    const products1 = await productModel.findById(productId1);
+    const products2 = await productModel.findById(productId2);
     const newTransaction = new transactionModel({
-        userId1: product1.owner,
-        userId2: product2.owner,
-        product1: [productId1],
-        product2: [productId2],
+        user1: products1.owner,
+        user2: products2.owner,
+        products1: [productId1],
+        products2: [productId2],
         status: 'active',
     });
     newTransaction
