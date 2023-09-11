@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
 const viewRoutes = require('./routes/viewRoutes');
 const userRoutes = require('./routes/userRoutes');
-
+const feedbackRoutes = require('./routes/feedbackRoutes');
 connectDB()
 
 app.use(session({
@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use('/', viewRoutes);
 app.use('/users', userRoutes);
+app.use('/feedback', feedbackRoutes);
 
 // Static files
 app.use(express.static(__dirname + '/public'));
