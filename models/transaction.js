@@ -28,8 +28,16 @@ const transactionSchema = new mongoose.Schema({
         default: 'active',
         enum: ['active', 'interrupted', 'pending', 'finished'],
     },
+
+    rating1: Number,
+
+    rating2: Number,
+
+    review1: String,
+
+    review2: String,
 });
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const Transaction = mongoose.model('transaction', transactionSchema);
 
 module.exports = Transaction;
