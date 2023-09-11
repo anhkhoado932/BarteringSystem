@@ -5,13 +5,17 @@ const connectDB = require('./dbConnection');
 const viewRoutes = require('./routes/viewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
-connectDB()
+const transactionRoutes = require('./routes/transaction');
 
-app.use(session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: true
-}));
+connectDB();
+
+app.use(
+    session({
+        secret: 'your_secret_key',
+        resave: false,
+        saveUninitialized: true,
+    })
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,6 +23,7 @@ app.use(express.json());
 app.use('/', viewRoutes);
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
+app.use('/transaction', transactionRoutes);
 
 // Static files
 app.use(express.static(__dirname + '/public'));
