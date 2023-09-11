@@ -40,3 +40,28 @@ exports.insertTransaction = async (req, res) => {
             res.status(400).send({ message: err });
         });
 };
+
+exports.updateTransaction = (req, res) => {
+    const transactionId = req.params.id;
+    const updateTransaction = req.body;
+    transactionModel
+        .findByIdAndUpdate(transactionId, updateTransaction, { new: true })
+        .then((transaction) => {
+            res.status(200).send(transaction);
+        })
+        .catch((err) => {
+            res.status(400).send({ message: err });
+        });
+};
+
+exports.deleteTransaction = (req, res) => {
+    const transactionId = new ObjectId(req.params.id);
+    transactionModel
+        .deleteOne({ _id: transactionId })
+        .then((result) => {
+            res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(400).send({ message: err });
+        });
+};
