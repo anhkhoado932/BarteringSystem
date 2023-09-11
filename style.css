@@ -180,9 +180,17 @@ a:hover {
     padding: 0px !important;
 }
 
-.transaction-details-barterer.hidden,
+.transaction-details-baterer.hidden,
 .transaction-details-progress.hidden {
     display: none;
+}
+
+.transaction-finish-btn,
+.transaction-cancel-btn {
+    display: block;
+    margin-top: 5px;
+    width: 100px;
+    max-width: 100px;
 }
 
 .large-avatar {
