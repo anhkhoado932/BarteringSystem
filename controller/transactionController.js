@@ -8,8 +8,11 @@ exports.getTransaction = (req, res) => {
         .find({
             $or: [{ user1: _id }, { user2: _id }],
         })
-        .then((transaction) => {
-            res.status(200).send(transaction);
+        .then((transactions) => {
+            const selectedId =
+                req.params.selectedId || transactions[0]._id.toString() || null;
+            req.session.selectedTransactionId = selectedId;
+            res.status(200).send(transactions);
         })
         .catch((err) => {
             res.status(400).send({ message: err });
