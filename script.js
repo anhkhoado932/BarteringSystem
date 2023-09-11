@@ -13,11 +13,13 @@ $(document).ready(function () {
     const chatbox = $(".transaction-chatbox");
     const messageBtn = $("#toggle-message-btn");
     const progressBar = $(".transaction-details-progress");
+    const userInfo = $(".transaction-details-baterer");
     messageBtn.on("click", function (event) {
         event.preventDefault();
         const isOpening = chatbox.hasClass("hidden");
         chatbox.toggleClass("hidden"); // toggle chatbox state
         progressBar.toggleClass("hidden");
+        userInfo.toggleClass("hidden");
         if (isOpening) {
             onOpeningChatbox();
         } else {
@@ -36,6 +38,7 @@ function onOpeningChatbox() {
     </div>
     </div>
     `);
+    
     // Detail
     const messageBtn = $("#toggle-message-btn");
     messageBtn.html(`
