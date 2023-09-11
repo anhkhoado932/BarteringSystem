@@ -7,6 +7,8 @@ const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 connectDB();
 
@@ -33,6 +35,12 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
-app.listen(PORT, () => {
+http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+});
+
+io.on('connection', (socket) => {
+    socket.on('open-transaction-message', async (transactionId) => {});
+    socket.on('message', async (message) => {});
+    socket.on('disconnect', async (message) => {});
 });
