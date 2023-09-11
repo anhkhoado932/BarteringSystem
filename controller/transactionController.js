@@ -9,16 +9,16 @@ exports.getTransaction = (req, res) => {
         .find({
             $or: [{ user1: _id }, { user2: _id }],
         })
-        .populate('user1', 'name email')
-        .populate('user2', 'name email')
-        .populate('products1', 'name imageUrl price')
-        .populate('products2', 'name imageUrl price')
+        .populate("user1", "name email")
+        .populate("user2", "name email")
+        .populate("products1", "name imageUrl price")
+        .populate("products2", "name imageUrl price")
         .then((transactions) => {
             transactions.sort(compareTransactionByStatus);
-            const selectedId =
-                req.params.selectedId || transactions[0]._id.toString() || null;
+            const selectedId = req.query.transactionId ?? null;
+            req.session.selectedTransactionId = selectedId;
             const selectedTransaction = transactions.find(
-                (e) => (e._id = selectedId)
+                (e) => e.id == selectedId
             );
             res.render("transaction", {
                 transactions,
