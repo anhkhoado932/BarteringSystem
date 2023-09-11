@@ -28,15 +28,22 @@ $(document).ready(function () {
             onClosingChatbox();
         }
     });
+
+    $(".transaction-list-item").on("click", function () {
+        const id = $(this).attr("id");
+        window.location.href = `/transaction?transactionId=${id}`;
+    });
 });
 
 function onOpeningChatbox() {
     // Chatbox
     socket.emit("start-message", {});
-
+    const transactionId = new URLSearchParams(window.location.search).get(
+        "transactionId"
+    );
     const chatboxContainer = $(".transaction-chatbox");
-    jQuery.ajax({
-        url: "/message?transactionId=&page=0",
+    $.ajax({
+        url: `/message/${transactionId}?page=0`,
         type: "GET",
         beforeSend: function () {
             chatboxContainer.html(`
@@ -49,7 +56,17 @@ function onOpeningChatbox() {
         },
         complete: function (data) {
             chatboxContainer.html(`
-            <div class="chatbox"></div>
+            <div class="chatbox">
+            ${data.responseJSON
+                .map(
+                    (res, i) =>
+                        `<p class="${res["from_me"] ? "from-me" : "from-them"}">
+                    ${res.content}
+                </p>
+                `
+                )
+                .join(" ")}
+            </div>
             <div class="input-group mb-3">
                 <input type="text" class="chatbox-input form-control" placeholder="type here..." aria-label="type here..." aria-describedby="basic-addon2">
                 <div class="input-group-append">
@@ -57,6 +74,19 @@ function onOpeningChatbox() {
                 </div>
             </div>
             `);
+
+            $(".chatbox-send").on("click", function (event) {
+                event.preventDefault();
+                const newMessage = $(".chatbox-input").val();
+                console.log(newMessage);
+                socket.emit("message", newMessage);
+
+                $(".chatbox-input").val("");
+                appendAndScroll(
+                    $(".chatbox"),
+                    `<p class="from-me">${newMessage}</p>`
+                );
+            });
         },
     });
 
@@ -66,7 +96,6 @@ function onOpeningChatbox() {
         <i class="bi bi-chevron-double-left"></i>
         View Details
     `);
-    c;
     setTimeout(() => {
         $(".transaction-details-items .col").each(function () {
             $(this).addClass("col-12");
@@ -114,19 +143,8 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $("chatbox-send").on("submit", function (event) {
-        event.preventDefault();
-        const newMessage = $("chatbox-input").val();
-        socket.emit("message", newMessage);
-
-        $("chatbox-input").val("");
-        appendAndScroll($(".chatbox"), `<p class="from-them">${content}</p>`);
-    });
-});
-
 function appendAndScroll(element, content) {
     element
         .append(content)
-        .animate({ scrollTop: element.prop("scrollHeight") }, 200);
+        .animate({ scrollTop: element.prop("scrollHeight") }, 100);
 }
