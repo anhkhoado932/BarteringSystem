@@ -5,7 +5,8 @@ const connectDB = require('./dbConnection');
 const viewRoutes = require('./routes/viewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
-const transactionRoutes = require('./routes/transaction');
+const transactionRoutes = require('./routes/transactionRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 connectDB();
 
@@ -24,6 +25,7 @@ app.use('/', viewRoutes);
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
+app.use('/message', messageRoutes);
 
 // Static files
 app.use(express.static(__dirname + '/public'));
