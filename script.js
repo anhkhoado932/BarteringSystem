@@ -155,7 +155,32 @@ function createMessageElement(data) {
             })
             .join(" ");
     }
-    return `<p class=${message["from_me"] ? "from-me" : "from-them"}>${
+    return `<p class=${data["from_me"] ? "from-me" : "from-them"}>${
         data.content
     }</p>`;
 }
+
+$(document).ready(function () {
+    $(".transaction-confirm-finish-btn").on("click", function () {
+        const transactionId = new URLSearchParams(window.location.search).get(
+            "transactionId"
+        );
+        $.ajax({
+            url: `/transaction/confirm`,
+            method: "POST",
+            data: { transactionId },
+        });
+        $("#confirmFinish").modal("hide");
+    });
+    $(".transaction-confirm-cancel-btn").on("click", function () {
+        const transactionId = new URLSearchParams(window.location.search).get(
+            "transactionId"
+        );
+        $.ajax({
+            url: `/transaction/cancel`,
+            method: "POST",
+            data: { transactionId },
+        });
+        $("#confirmCancel").modal("hide");
+    });
+});
