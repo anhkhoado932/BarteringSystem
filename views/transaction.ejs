@@ -107,7 +107,7 @@
                 <div class="col-2 transaction-list">
                     <% if (transactions) { %> 
                         <% transactions.forEach((transaction)=> { %>
-                        <div class="transaction-list-item">
+                        <div class="transaction-list-item" id="<%= transaction._id %>">
                             <% if (transaction.status == "active") { %>
                                 <span class="transaction-indicator" style="background-color: rgb(255, 196, 0)"></span>
                             <% } else if (transaction.status == "finished") { %>
@@ -132,12 +132,20 @@
                     <% } %>
                 </div>
                 <div class="col-7 transaction-chatbox hidden"></div>
-                <div class="col transaction-details">
+                <div class="col transaction-details mt-3">
                     <div class="container transaction-details-items">
                         <div class="row">
-                            <div class="col">item1</div>
-                            <div class="col">trade</div>
-                            <div class="col">item2</div>
+                            <div class="col d-flex justify-content-center align-items-center flex-column">
+                                <img class="trade-item1" src="<%= selectedTransaction.products1[0].imageUrl %>" alt="<%= selectedTransaction.products1[0].name %>">
+                                <div>$<%= selectedTransaction.products1[0].price %></div>
+                            </div>
+                            <div class="col trade-icon d-flex justify-content-center align-items-center">
+                                <i class="bi bi-arrow-left-right" style="font-size: 50px"></i>
+                            </div>
+                            <div class="col d-flex justify-content-center align-items-center flex-column">
+                                <img class="trade-item2" src="<%= selectedTransaction.products2[0].imageUrl %>" alt="<%= selectedTransaction.products2[0].name %>">
+                                <div>$<%= selectedTransaction.products2[0].price %></div>
+                            </div>
                         </div>
                     </div>
                     <button id="toggle-message-btn" class="btn">

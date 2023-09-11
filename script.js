@@ -41,6 +41,9 @@ function onOpeningChatbox() {
     $(".transaction-details-items .col").each(function () {
         $(this).addClass("col-12");
     });
+    $(".transaction-details-items .col.trade-icon").html(
+        '<i class="bi bi-arrow-down-up" style="font-size: 30px"></i>'
+    );
 }
 
 function onClosingChatbox() {
@@ -53,4 +56,7 @@ function onClosingChatbox() {
     $(".transaction-details-items .col").each(function () {
         $(this).removeClass("col-12");
     });
+    $(".transaction-details-items .col.trade-icon").html(
+        '<i class="bi bi-arrow-left-right" style="font-size: 50px"></i>'
+    );
 }
