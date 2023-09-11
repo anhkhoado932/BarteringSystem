@@ -1,6 +1,6 @@
-const ObjectId = require('mongodb').ObjectId;
-const productModel = require('../models/product');
-const transactionModel = require('../models/transaction');
+const ObjectId = require("mongodb").ObjectId;
+const productModel = require("../models/product");
+const transactionModel = require("../models/transaction");
 
 exports.getTransaction = (req, res) => {
     const user = req.session.user;
@@ -32,8 +32,8 @@ exports.getTransaction = (req, res) => {
 };
 
 exports.insertTransaction = async (req, res) => {
-    const productId1 = new ObjectId(req.body['productId1']);
-    const productId2 = new ObjectId(req.body['productId2']);
+    const productId1 = new ObjectId(req.body["productId1"]);
+    const productId2 = new ObjectId(req.body["productId2"]);
     const products1 = await productModel.findById(productId1);
     const products2 = await productModel.findById(productId2);
     const newTransaction = new transactionModel({
@@ -41,13 +41,13 @@ exports.insertTransaction = async (req, res) => {
         user2: products2.owner,
         products1: [productId1],
         products2: [productId2],
-        status: 'active',
+        status: "active",
     });
     newTransaction
         .save()
         .then((transaction) => {
             res.status(201).send({
-                message: 'Transaction created successfully',
+                message: "Transaction created successfully",
                 data: transaction,
             });
         })
@@ -75,6 +75,40 @@ exports.deleteTransaction = (req, res) => {
         .deleteOne({ _id: transactionId })
         .then((result) => {
             res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(400).send({ message: err });
+        });
+};
+
+exports.finishTransaction = (req, res) => {
+    const { transactionId } = req.body;
+    const currentTransaction = transactionModel.findById(transactionId, {
+        status: "interrupted",
+    });
+    if (currentTransaction.status == "active") {
+        currentTransaction.status = "pending";
+    } else if (currentTransaction.status == "pending") {
+        currentTransaction.status = "finished";
+    }
+    currentTransaction
+        .save()
+        .then(() => {
+            res.status(200).send("/transaction");
+        })
+        .catch((err) => {
+            res.status(400).send({ message: err });
+        });
+};
+
+exports.cancelTransaction = (req, res) => {
+    const { transactionId } = req.body;
+    transactionModel
+        .findByIdAndUpdate(transactionId, {
+            status: "interrupted",
+        })
+        .then(() => {
+            res.status(200).redirect("/transaction");
         })
         .catch((err) => {
             res.status(400).send({ message: err });
