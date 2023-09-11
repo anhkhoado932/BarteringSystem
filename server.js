@@ -12,13 +12,13 @@ const io = require('socket.io')(http);
 
 connectDB();
 
-app.use(
-    session({
-        secret: 'your_secret_key',
-        resave: false,
-        saveUninitialized: true,
-    })
-);
+const sessionMiddleware = session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+});
+app.use(sessionMiddleware);
+io.engine.use(sessionMiddleware);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
