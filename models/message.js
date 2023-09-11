@@ -30,6 +30,8 @@ const messageSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+messageSchema.index({ transactionId: 1, createdAt: -1 });
+
 const Message = mongoose.model('message', messageSchema);
 
 module.exports = Message;
