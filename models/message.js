@@ -13,7 +13,7 @@ const messageSchema = new mongoose.Schema(
         messageType: {
             type: String,
             default: 'text',
-            enum: ['text', 'image'],
+            enum: ['text', 'image', 'emoji'],
         },
         content: {
             type: String,

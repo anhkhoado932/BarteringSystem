@@ -58,13 +58,13 @@ io.on('connection', (socket) => {
             const newMessage = new Message({
                 transactionId: room,
                 userId: user._id,
-                type: 'text',
+                messageType: 'text',
                 content: content,
                 parentId: null,
             });
             newMessage
                 .save()
-                .populate('parentId')
+                .populate('parentId', 'messageType content url')
                 .then((message) => {
                     io.sockets.in(room).emit('new-message', { message });
                 });
