@@ -3,16 +3,28 @@ const productModel = require('../models/product');
 const transactionModel = require('../models/transaction');
 
 exports.getTransaction = (req, res) => {
-    const { _id } = req.session.user;
+    const user = req.session.user;
+    const { _id } = user;
     transactionModel
         .find({
             $or: [{ user1: _id }, { user2: _id }],
         })
+        .populate('user1', 'name email')
+        .populate('user2', 'name email')
+        .populate('products1', 'name imageUrl price')
+        .populate('products2', 'name imageUrl price')
         .then((transactions) => {
+            transactions.sort(compareTransactionByStatus);
             const selectedId =
                 req.params.selectedId || transactions[0]._id.toString() || null;
-            req.session.selectedTransactionId = selectedId;
-            res.status(200).send(transactions);
+            const selectedTransaction = transactions.find(
+                (e) => (e._id = selectedId)
+            );
+            res.render("transaction", {
+                transactions,
+                user,
+                selectedTransaction,
+            });
         })
         .catch((err) => {
             res.status(400).send({ message: err });
@@ -68,3 +80,20 @@ exports.deleteTransaction = (req, res) => {
             res.status(400).send({ message: err });
         });
 };
+
+function compareTransactionByStatus(transaction1, transaction2) {
+    // TODO: create TransactionStatus schema in the future
+    const statusEnum = {
+        active: 0,
+        pending: 1,
+        finished: 2,
+        interrupted: 3,
+    };
+
+    const status1 = transaction1.status;
+    const status2 = transaction2.status;
+    if (!(status1 in statusEnum) || !(status2 in statusEnum)) {
+        return -1;
+    }
+    return statusEnum[status1] < statusEnum[status2];
+}

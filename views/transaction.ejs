@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bartering System</title>
+
+        <!-- bootstrap -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous"
+        />
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="style.css" />
+
+        <!-- font -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Montserrat"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2? family=Josefin+Slab&family=Karla&display=swap"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Playfair+Display"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Lato"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Merriweather"
+        />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    </head>
+
+    <body>
+        <div class="font2 bg" align="center">TRANSACTION PAGE</div>
+        <div class="container transaction-container mt-5">
+            <div class="row header">
+                <div class="col-2"><b>Transaction</b></div>
+                <div class="col"><b>Details</b></div>
+            </div>
+            <div class="row h-100">
+                <div class="col-2 transaction-list">
+                    <% if (transactions) { %> 
+                        <% transactions.forEach((transaction)=> { %>
+                        <div class="transaction-list-item" id="<%= transaction._id %>">
+                            <% if (transaction.status == "active") { %>
+                                <span class="transaction-indicator" style="background-color: rgb(255, 196, 0)"></span>
+                            <% } else if (transaction.status == "finished") { %>
+                                <span class="transaction-indicator" style="background-color: green"></span>
+                            <% } else if (transaction.status == "interrupted") { %>
+                                <span class="transaction-indicator" style="background-color: grey"></span>
+                            <% } %>
+                            <div class="rounded-circle border d-flex justify-content-center align-items-center avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <% if (transaction.user1.name == user.name) { %>
+                                    <b><%= transaction.user2.name %></b>
+                                <% } else  { %>
+                                    <b><%= transaction.user1.name %></b>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% }) %> 
+                    <% } else { %> 
+                        There are no transactions... 
+                    <% } %>
+                </div>
+                <div class="col-8 transaction-chatbox hidden"></div>
+                <div class="col transaction-details">
+
+                    <button id="toggle-message-btn" class="btn">
+                        <i class="bi bi-chevron-double-right"></i>
+                        Open Chat
+                    </button>
+
+                    <div class="transaction-details-progress mt-3">
+                        <b>Current status:</b>
+                        <div class="progress">
+                        <% if (selectedTransaction.status === 'interrupted') { %>
+                                <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <% } else if (selectedTransaction.status === 'active') { %>
+                                <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Active</div>
+                        <% } else if (selectedTransaction.status === 'pending') { %>
+                                <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">Pending</div>
+                            <% } else if (selectedTransaction.status === 'finished') { %>
+                                <div class="progress-bar progress-bar-striped bg-success progress-bar-animated active" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Finish</div>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div class="container transaction-details-items mt-3">
+                        <b>Product:</b>
+                        <div class="row">
+                            <div class="col d-flex justify-content-center align-items-center flex-column">
+                                <img class="trade-item1" src="<%= selectedTransaction.products1[0].imageUrl %>" alt="<%= selectedTransaction.products1[0].name %>">
+                                <div>$<%= selectedTransaction.products1[0].price %></div>
+                            </div>
+                            <div class="col trade-icon d-flex justify-content-center align-items-center">
+                                <i class="bi bi-arrow-left-right" style="font-size: 50px"></i>
+                            </div>
+                            <div class="col d-flex justify-content-center align-items-center flex-column">
+                                <img class="trade-item2" src="<%= selectedTransaction.products2[0].imageUrl %>" alt="<%= selectedTransaction.products2[0].name %>">
+                                <div>$<%= selectedTransaction.products2[0].price %></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container mt-3">
+                        <div class="row">
+                            <div class="col transaction-details-baterer">
+                                <b>
+                                    Barterer:
+                                </b>
+                                <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
+                                    <i class="bi bi-person" style="font-size: 100px"></i>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <% if (selectedTransaction.user1.name == user.name) { %>
+                                        <b><%= selectedTransaction.user2.name %></b>
+                                    <% } else  { %>
+                                        <b><%= selectedTransaction.user1.name %></b>
+                                    <% } %>
+                                </div>    
+                            </div>
+                            <div class="col">                            
+                                <b style="display: block">Action</b>
+                                <button class="btn btn-success">Finish</button>
+                                <button class="btn btn-danger">Cancel</button>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"
+        ></script>
+        <script src="../script.js"></script>
+    </body>
+
+    <footer class="font3 fs-6" align="center">
+        <div class="container">
+            <hr />
+            <table class="table table-borderless">
+                <tr>
+                    <th scope="col">
+                        <a href="/info#ContactUs" class="black">Contact Us</a>
+                    </th>
+                    <th scope="col">
+                        <a href="/info#About" class="black">About</a>
+                    </th>
+                    <th scope="col">
+                        <a href="/info#FAQs" class="black">FAQs</a>
+                    </th>
+                </tr>
+            </table>
+            <p>
+                &copy; Website designed by Vegetable Dog Team. Last updated
+                18/08/2023.
+            </p>
+        </div>
+    </footer>
+</html>
