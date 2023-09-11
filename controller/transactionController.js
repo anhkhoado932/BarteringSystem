@@ -8,11 +8,15 @@ exports.getTransaction = (req, res) => {
         .find({
             $or: [{ user1: _id }, { user2: _id }],
         })
+        .populate('user1', 'name email')
+        .populate('user2', 'name email')
+        .populate('products1', 'name imageUrl price')
+        .populate('products2', 'name imageUrl price')
         .then((transactions) => {
             const selectedId =
                 req.params.selectedId || transactions[0]._id.toString() || null;
             req.session.selectedTransactionId = selectedId;
-            res.status(200).send(transactions);
+            res.render('transaction', { transactions });
         })
         .catch((err) => {
             res.status(400).send({ message: err });
