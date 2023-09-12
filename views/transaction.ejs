@@ -61,7 +61,7 @@
                             <% } else if (transaction.status == "finished") { %>
                                 <span class="transaction-indicator bg-success"></span>
                             <% } else if (transaction.status == "interrupted") { %>
-                                <span class="transaction-indicator bg-info"></span>
+                                <span class="transaction-indicator bg-secondary"></span>
                             <% } else { %>
                                 <span class="transaction-indicator bg-warning"></span>
                             <% } %>
@@ -94,7 +94,7 @@
                             <b>Current status:</b>
                             <div class="progress">
                             <% if (selectedTransaction.status === 'interrupted') { %>
-                                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div style="margin: 0 auto">Interrupted</div>
                             <% } else if (selectedTransaction.status === 'active') { %>
                                     <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Active</div>
                             <% } else if (selectedTransaction.status.startsWith('pending')) { %>
@@ -128,36 +128,43 @@
                                     <b>
                                         Barterer:
                                     </b>
-                                    <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
-                                        <i class="bi bi-person" style="font-size: 100px"></i>
+                                    <div class="d-flex">
+                                        <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
+                                            <i class="bi bi-person" style="font-size: 100px"></i>
+                                        </div>
+                                        <div>
+                                        <% if (selectedTransaction.user1.name == user.name) { %>
+                                            <b style="display: block">Name: <%= selectedTransaction.user2.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction.user2.email %></b>
+                                        <% } else  { %>
+                                            <b style="display: block">Name: <%= selectedTransaction.user1.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction.user1.email %></b>
+                                        <% } %>
+                                        
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                    <% if (selectedTransaction.user1.name == user.name) { %>
-                                        <b><%= selectedTransaction.user2.name %></b>
-                                    <% } else  { %>
-                                        <b><%= selectedTransaction.user1.name %></b>
-                                    <% } %>
                                 </div>    
                             </div>
-                            <div class="col">                            
-                                <b style="display: block">Action</b>
-                                <% if ((selectedTransaction.status == 'pending_user1' && selectedTransaction.isUser1) || 
-                                    (selectedTransaction.status == 'pending_user2' && !selectedTransaction.isUser1)
-                                    ) { %>
-                                    Waiting for the other user
-                                <% } else { %>
-                                    <button 
-                                        class="btn btn-success transaction-finish-btn"
-                                        data-bs-toggle="modal" data-bs-target="#confirmFinish">
-                                        Finish
-                                    </button>
-                                    <button 
-                                        class="btn btn-danger transaction-cancel-btn"
-                                        data-bs-toggle="modal" data-bs-target="#confirmCancel">
-                                        Cancel
-                                    </button>                            
+                            <div class="col">                    
+                                <% if (selectedTransaction.status !== "finished" && selectedTransaction.status !== "interrupted")  { %> 
+                                    <b style="display: block">Action:</b>
+                                    <% if ((selectedTransaction.status == 'pending_user1' && selectedTransaction.isUser1) || 
+                                        (selectedTransaction.status == 'pending_user2' && !selectedTransaction.isUser1)
+                                        ) { %>
+                                        Waiting for the other user
+                                    <% } else { %>
+                                        <button 
+                                            class="btn btn-success transaction-finish-btn"
+                                            data-bs-toggle="modal" data-bs-target="#confirmFinish">
+                                            Finish
+                                        </button>
+                                        <button 
+                                            class="btn btn-danger transaction-cancel-btn"
+                                            data-bs-toggle="modal" data-bs-target="#confirmCancel">
+                                            Cancel
+                                        </button>                            
 
-                                <% } %> 
+                                    <% } %> 
+                                <% } %>       
                             </div>
                         </div>
                     </div>
