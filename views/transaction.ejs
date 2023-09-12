@@ -57,11 +57,13 @@
                         <% transactions.forEach((transaction)=> { %>
                         <div class="transaction-list-item" id="<%= transaction._id %>">
                             <% if (transaction.status == "active") { %>
-                                <span class="transaction-indicator" style="background-color: rgb(255, 196, 0)"></span>
+                                <span class="transaction-indicator bg-warning"></span>
                             <% } else if (transaction.status == "finished") { %>
-                                <span class="transaction-indicator" style="background-color: green"></span>
+                                <span class="transaction-indicator bg-success"></span>
                             <% } else if (transaction.status == "interrupted") { %>
-                                <span class="transaction-indicator" style="background-color: grey"></span>
+                                <span class="transaction-indicator bg-secondary"></span>
+                            <% } else { %>
+                                <span class="transaction-indicator bg-warning"></span>
                             <% } %>
                             <div class="rounded-circle border d-flex justify-content-center align-items-center avatar">
                                 <i class="bi bi-person"></i>
@@ -92,10 +94,10 @@
                             <b>Current status:</b>
                             <div class="progress">
                             <% if (selectedTransaction.status === 'interrupted') { %>
-                                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div style="margin: 0 auto">Interrupted</div>
                             <% } else if (selectedTransaction.status === 'active') { %>
                                     <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Active</div>
-                            <% } else if (selectedTransaction.status === 'pending') { %>
+                            <% } else if (selectedTransaction.status.startsWith('pending')) { %>
                                     <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">Pending</div>
                             <% } else if (selectedTransaction.status === 'finished') { %>
                                 <div class="progress-bar progress-bar-striped bg-success progress-bar-animated active" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Finish</div>
@@ -126,30 +128,91 @@
                                     <b>
                                         Barterer:
                                     </b>
-                                    <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
-                                        <i class="bi bi-person" style="font-size: 100px"></i>
+                                    <div class="d-flex">
+                                        <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
+                                            <i class="bi bi-person" style="font-size: 100px"></i>
+                                        </div>
+                                        <div>
+                                        <% if (selectedTransaction.user1.name == user.name) { %>
+                                            <b style="display: block">Name: <%= selectedTransaction.user2.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction.user2.email %></b>
+                                        <% } else  { %>
+                                            <b style="display: block">Name: <%= selectedTransaction.user1.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction.user1.email %></b>
+                                        <% } %>
+                                        
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                    <% if (selectedTransaction.user1.name == user.name) { %>
-                                        <b><%= selectedTransaction.user2.name %></b>
-                                    <% } else  { %>
-                                        <b><%= selectedTransaction.user1.name %></b>
-                                    <% } %>
                                 </div>    
                             </div>
-                            <div class="col">                            
-                                <b style="display: block">Action</b>
-                                <button class="btn btn-success transaction-finish-btn">Finish</button>
-                                <button class="btn btn-danger transaction-cancel-btn">Cancel</button>    
+                            <div class="col">                    
+                                <% if (selectedTransaction.status !== "finished" && selectedTransaction.status !== "interrupted")  { %> 
+                                    <b style="display: block">Action:</b>
+                                    <% if ((selectedTransaction.status == 'pending_user1' && !selectedTransaction.isUser1) || 
+                                        (selectedTransaction.status == 'pending_user2' && selectedTransaction.isUser1)
+                                        ) { %>
+                                        Waiting for the other user
+                                    <% } else { %>
+                                        <button 
+                                            class="btn btn-success transaction-finish-btn"
+                                            data-bs-toggle="modal" data-bs-target="#confirmFinish">
+                                            Finish
+                                        </button>
+                                        <button 
+                                            class="btn btn-danger transaction-cancel-btn"
+                                            data-bs-toggle="modal" data-bs-target="#confirmCancel">
+                                            Cancel
+                                        </button>                            
+
+                                    <% } %> 
+                                <% } %>       
                             </div>
                         </div>
                     </div>
                     <% } else { %>
-                     TODO
+                        <div style="text-align: center">
+                            Select a transaction to view details!
+                        </div>
                     <% } %>
                 </div>
             </div>
         </div>
+
+        <div id="confirmFinish" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Finish Transaction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This action cannot be undone. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, go back</button>
+                        <button type="button" class="btn btn-primary transaction-confirm-finish-btn">Yes, finish transaction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+        <div id="confirmCancel" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Finish Transaction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This action cannot be undone. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, go back</button>
+                        <button type="button" class="btn btn-primary transaction-confirm-cancel-btn">Yes, cancel transaction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
