@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
+const productRoutes = require('./routes/productRoutes');
 const viewRoutes = require('./routes/viewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
@@ -25,10 +26,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use('/', viewRoutes);
+feature/product-upload-delete
+app.use('/products', productRoutes);
+app.use('/item', productRoutes);
+
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
 app.use('/message', messageRoutes);
+ main
 
 // Static files
 app.use(express.static(__dirname + '/public'));
@@ -39,6 +45,8 @@ const PORT = 3000;
 http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+ feature/product-upload-delete
 
 io.on("connection", (socket) => {
     socket.on("start-message", () => {
@@ -63,3 +71,4 @@ io.on("connection", (socket) => {
     });
     socket.on("disconnect", async (message) => {});
 });
+ main
