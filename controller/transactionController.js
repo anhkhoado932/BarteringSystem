@@ -13,13 +13,18 @@ exports.getTransaction = (req, res) => {
         .populate("user2", "name email")
         .populate("products1", "name imageUrl price")
         .populate("products2", "name imageUrl price")
+        .lean()
         .then((transactions) => {
             transactions.sort(compareTransactionByStatus);
             const selectedId = req.query.transactionId ?? null;
             req.session.selectedTransactionId = selectedId;
             const selectedTransaction = transactions.find(
-                (e) => e.id == selectedId
+                (e) => e.id.toString() == selectedId
             );
+            if (selectedTransaction) {
+                selectedTransaction["isUser1"] =
+                    selectedTransaction["user1"]._id == _id;
+            }
             res.render("transaction", {
                 transactions,
                 user,
@@ -81,11 +86,9 @@ exports.deleteTransaction = (req, res) => {
         });
 };
 
-exports.finishTransaction = (req, res) => {
+exports.finishTransaction = async (req, res) => {
     const { transactionId } = req.body;
-    const currentTransaction = transactionModel.findById(transactionId, {
-        status: "interrupted",
-    });
+    const currentTransaction = await transactionModel.findById(transactionId);
     if (currentTransaction.status == "active") {
         currentTransaction.status = "pending";
     } else if (currentTransaction.status == "pending") {
@@ -94,7 +97,7 @@ exports.finishTransaction = (req, res) => {
     currentTransaction
         .save()
         .then(() => {
-            res.status(200).send("/transaction");
+            res.redirect("/transaction");
         })
         .catch((err) => {
             res.status(400).send({ message: err });
@@ -108,7 +111,7 @@ exports.cancelTransaction = (req, res) => {
             status: "interrupted",
         })
         .then(() => {
-            res.status(200).redirect("/transaction");
+            res.redirect("/transaction");
         })
         .catch((err) => {
             res.status(400).send({ message: err });
