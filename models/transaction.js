@@ -1,43 +1,41 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
     user1: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
     },
     user2: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
     },
     products1: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: "Product",
             required: true,
         },
     ],
     products2: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: "Product",
             required: true,
         },
     ],
     status: {
         type: String,
-        default: 'active',
-        enum: ['active', 'interrupted', 'pending', 'finished'],
+        default: "active",
+        enum: [
+            "active",
+            "interrupted",
+            "pending_user1",
+            "pending_user2",
+            "finished",
+        ],
     },
-
-    rating1: Number,
-
-    rating2: Number,
-
-    review1: String,
-
-    review2: String,
 });
 
-const Transaction = mongoose.model('transaction', transactionSchema);
+const Transaction = mongoose.model("transaction", transactionSchema);
 
 module.exports = Transaction;
