@@ -169,6 +169,10 @@ $(document).ready(function () {
             url: `/transaction/finish`,
             type: "POST",
             data: { transactionId },
+            success: (data) => {
+                if (typeof data.redirect == 'string')
+                    window.location = data.redirect
+            }
         });
         $("#confirmFinish").modal("hide");
     });
@@ -180,6 +184,10 @@ $(document).ready(function () {
             url: `/transaction/cancel`,
             type: "POST",
             data: { transactionId },
+            success: (data) => {
+                if (typeof data.redirect == 'string')
+                    window.location = data.redirect
+            }
         });
         $("#confirmCancel").modal("hide");
     });

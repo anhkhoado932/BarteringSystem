@@ -147,8 +147,8 @@
                             <div class="col">                    
                                 <% if (selectedTransaction.status !== "finished" && selectedTransaction.status !== "interrupted")  { %> 
                                     <b style="display: block">Action:</b>
-                                    <% if ((selectedTransaction.status == 'pending_user1' && selectedTransaction.isUser1) || 
-                                        (selectedTransaction.status == 'pending_user2' && !selectedTransaction.isUser1)
+                                    <% if ((selectedTransaction.status == 'pending_user1' && !selectedTransaction.isUser1) || 
+                                        (selectedTransaction.status == 'pending_user2' && selectedTransaction.isUser1)
                                         ) { %>
                                         Waiting for the other user
                                     <% } else { %>

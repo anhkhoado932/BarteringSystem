@@ -91,15 +91,43 @@ exports.finishTransaction = async (req, res) => {
     const { transactionId } = req.body;
     const currentTransaction = await transactionModel.findById(transactionId);
     const isUser1 = currentTransaction.user1._id == _id;
-    if (currentTransaction.status == "active") {
-        currentTransaction.status = isUser1 ? "pending_user1" : "pending_user2";
-    } else if (currentTransaction.status.startsWith("pending")) {
+    if (currentTransaction.status.startsWith("pending")) {
         currentTransaction.status = "finished";
     }
+    else if (currentTransaction.status == "active") {
+        currentTransaction.status = isUser1 ? "pending_user2" : "pending_user1";
+    } 
     currentTransaction
         .save()
-        .then(() => {
-            res.redirect("/transaction");
+        .then((t) => {
+            res.send({ redirect: "/transaction"});
+
+            // cancel all transaction involving these product
+            if (t.status == "finished"){
+                const transactedProductIds = [
+                    ...currentTransaction.products1, 
+                    ...currentTransaction.products2
+                ];
+                transactionModel.updateMany({
+                    $or: [
+                        {
+                            products1: {
+                                $in: transactedProductIds
+                            }
+                        },
+                        {
+                            products2: {
+                                $in: transactedProductIds
+                            }
+                        }
+                    ],
+                    _id: { $ne: currentTransaction._id }
+                }, {
+                    status: "interrupted"
+                }).then((t) => {
+                    console.log(t);
+                });
+            }
         })
         .catch((err) => {
             res.status(400).send({ message: err });
@@ -113,7 +141,7 @@ exports.cancelTransaction = (req, res) => {
             status: "interrupted",
         })
         .then(() => {
-            res.redirect("/transaction");
+            res.send({ redirect: "/transaction" });
         })
         .catch((err) => {
             res.status(400).send({ message: err });
