@@ -1,5 +1,4 @@
 $(document).ready(function() {
- feature/product-upload-delete
     setTimeout(function() {
         $('.temp-message').fadeOut('slow', function() {
             $(this).remove();
