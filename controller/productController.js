@@ -95,3 +95,12 @@ exports.getItems = async (req, res) => {
         priceRange: req.query.priceRange || 'all'
     });
 };
+
+exports.getItemsByUser = async (req, res) => {
+    const { _id } = req.session.user;
+    Product
+        .find({ owner: _id })
+        .then((products) => {
+            res.status(200).send(products);
+        })
+}
