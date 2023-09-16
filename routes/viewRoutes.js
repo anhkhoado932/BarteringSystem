@@ -23,7 +23,7 @@ router.get('/product-detail/:productId', async (req, res) => {
 });
 
 router.get('/register-page', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'register.html'));
+    res.sendFile(path.join(__dirname, '../public', 'register.html'));
 });
 
 router.get('/registration-success', (req, res) => {
@@ -31,7 +31,7 @@ router.get('/registration-success', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'login.html'));
+    res.sendFile(path.join(__dirname, '../public', 'login.html'));
 });
 
 router.post('/login', userController.loginUser);
