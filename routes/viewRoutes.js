@@ -5,6 +5,7 @@ const User = require('../models/user');
 const userController = require('../controller/userController');
 const path = require('path');
 
+router.get('/', (req, res) => res.redirect('/home'))
 router.get('/home', (req, res) => {
     let user = req.session.user;
     res.render('home', { user: user });
