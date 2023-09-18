@@ -29,7 +29,7 @@ app.use(express.json());
 app.use('/', viewRoutes);
 
 app.use('/products', productRoutes);
-app.use('/item', productRoutes);
+
 
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
