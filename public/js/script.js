@@ -9,7 +9,7 @@ $(document).ready(function() {
         const productId = $(this).data('product-id');
         
         $.ajax({
-            url: `/api/products/${productId}`,
+            url: `/product/${productId}`,
             type: 'DELETE',
             success: function(result) {
                 // Display message

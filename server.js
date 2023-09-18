@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use('/', viewRoutes);
 
-app.use('/products', productRoutes);
+app.use('/product', productRoutes);
 
 
 app.use('/users', userRoutes);
