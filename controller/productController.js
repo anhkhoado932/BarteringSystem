@@ -76,6 +76,7 @@ exports.getProducts = async (req, res) => {
             }
         }
 
+        filter['owner'] = { $ne: req.session.user._id };
         let user = req.session.user;
         let products = await Product.find(filter).populate('owner');
         res.render('product', {
