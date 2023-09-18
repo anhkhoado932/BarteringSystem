@@ -12,7 +12,7 @@
 
                 <!-- price filter -->
                 <div class="my-4">
-                    <form action="/item" method="GET">
+                    <form action="/product" method="GET">
                         <label for="priceRange">Filter by Price Range:</label>
                         <select name="priceRange" id="priceRange" onchange="this.form.submit()">
                             <option value="all" <% if(!priceRange || priceRange=='all' ) { %> selected <% } %>>All
