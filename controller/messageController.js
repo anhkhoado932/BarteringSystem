@@ -2,9 +2,6 @@ const messageController = require('../models/message');
 
 exports.getMessages = (req, res) => {
     const { _id } = req.session.user;
-    const { page } = req.query.page || 0;
-    const limit = 10;
-    const offset = limit * page;
     const transactionId = req.params.transactionId;
     if (!transactionId) {
         return res
@@ -15,8 +12,6 @@ exports.getMessages = (req, res) => {
     messageController
         .find({ transactionId })
         .sort("-createdAt")
-        .skip(offset)
-        .limit(limit)
         .lean()
         .then((messages) => {
             messages.reverse();

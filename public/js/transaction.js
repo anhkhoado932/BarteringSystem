@@ -31,7 +31,7 @@ function onOpeningChatbox() {
         "transactionId"
     );
     $.ajax({
-        url: `/message/${transactionId}?page=0`,
+        url: `/message/${transactionId}`,
         type: "GET",
         beforeSend: function () {
             $(".transaction-chatbox").html(`

@@ -89,3 +89,12 @@ exports.getProducts = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+exports.getProductsByUser = async (req, res) => {
+    const { _id } = req.session.user;
+    Product
+        .find({ owner: _id })
+        .then((products) => {
+            res.status(200).send(products);
+        })
+}
