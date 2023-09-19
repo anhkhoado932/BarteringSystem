@@ -54,6 +54,7 @@ exports.insertTransaction = async (req, res) => {
             res.status(201).send({
                 message: "Transaction created successfully",
                 data: transaction,
+                redirect: `/transaction?transactionId=${transaction._id.toString()}`
             });
         })
         .catch((err) => {
