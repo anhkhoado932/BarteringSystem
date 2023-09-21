@@ -15,6 +15,7 @@ const io = require('socket.io')(http);
 
 connectDB();
 
+// Session Configuration
 const sessionMiddleware = session({
     secret: 'your_secret_key',
     resave: false,
@@ -23,14 +24,14 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
+// Body Parser Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
+
+// Registering routes
 app.use('/', viewRoutes);
-
 app.use('/product', productRoutes);
-
-
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
@@ -40,6 +41,7 @@ app.use('/message', messageRoutes);
 // Static files
 app.use(express.static(__dirname + '/public'));
 
+// View Engine Configuration
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
