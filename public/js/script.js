@@ -9,7 +9,7 @@ $(document).ready(function() {
         const productId = $(this).data('product-id');
         
         $.ajax({
-            url: `/api/products/${productId}`,
+            url: `/product/${productId}`,
             type: 'DELETE',
             success: function(result) {
                 // Display message
@@ -32,6 +32,6 @@ $(document).ready(function() {
     })
     $('#priceFilter').on('change', function() {
         let range = $(this).val();
-        window.location.href = "/item?priceRange=" + range;
+        window.location.href = "/product?priceRange=" + range;
     });
 });

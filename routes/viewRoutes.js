@@ -42,7 +42,7 @@ router.get('/profile', async (req, res) => {
         return res.redirect('/login');
     }
 
-    let products = await Product.find();
+    let products = await Product.find({ owner: req.session.user._id });
     let message = req.session.message || null;
     req.session.message = null;
 
