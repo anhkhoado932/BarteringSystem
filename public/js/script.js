@@ -26,6 +26,7 @@ $(document).ready(function () {
     //display notification
     function displayNotification(message) {
         const notificationHTML = `
+
         <div class="notification-banner">
             ${message}
             <button class="close-notification">X</button>
@@ -49,7 +50,8 @@ $(document).ready(function () {
 
     fetchLatestNotification();
 
-    $('.cancel-btn, .remove-fav-btn').on('click', function () {
+    $('.cancel-btn, .remove-fav-btn, .delete-user-btn, .delete-product-btn, .delete-feedback-btn').on('click', function () {
+      
         const item = $(this).data('item');
 
         //if the id is favorite id, it should be the same as product id
@@ -88,5 +90,15 @@ $(document).ready(function () {
     $('#priceFilter').on('change', function () {
         let range = $(this).val();
         window.location.href = "/product?priceRange=" + range;
+    });
+
+    $('.edit-user-btn').click(function () {
+        const userId = $(this).data('user-id');
+        window.location.href = `/edit-user/${userId}`;
+    });
+
+    $('.edit-product-btn').click(function () {
+        const productId = $(this).data('product-id');
+        window.location.href = `/edit-product/${productId}`;
     });
 });

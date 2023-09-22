@@ -19,42 +19,34 @@ router.get('/product-detail/:productId', async (req, res) => {
 });
 
 router.get('/profile', async (req, res) => {
-    try{
-        if (!req.session.user) {
-            return res.redirect('/login');
-        }
+    let products = await Product.find({ owner: req.session.user._id });
+    let message = req.session.message || null;
+    req.session.message = null;
 
-        let message = req.session.message || null;
-        req.session.message = null;
-
-        const [products, users, feedbacks] = await Promise.all([
-            Product.find(),
-            User.find(),
-            Feedback.find(),
-        
-        ]);
-
-        if (req.session.user.role === 'admin') {
-            return res.render('admin', {
-                user: req.session.user,
-                users,
-                products,
-                feedbacks,
-                message
-            });
-        }
-
-            res.render('profile', {
-                user: req.session.user,
-                products,
-                message,
-                //let profile.ejs get the favoriteProducts
-                favoriteProducts: userWithFavorites.favorites
-            });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    //get the products user clicked the favorite button
+    let userWithFavorites = await User.findById(req.session.user._id).populate('favorites');
+    // const [products, users, feedbacks] = await Promise.all([
+    //     Product.find(),
+    //     User.find(),
+    //     Feedback.find(),
+    // ]);
+    if (req.session.user.role === 'admin') {
+        const users = await User.find();
+        res.render('admin', {
+            user: req.session.user,
+            users: users,
+            products: products,
+            message: message
+        });
+    } else {
+        res.render('profile', {
+            user: req.session.user,
+            products: products,
+            message: message,
+            //let profile.ejs get the favoriteProducts
+            favoriteProducts: userWithFavorites.favorites
+        });
+    };
 });
 
 router.get('/search', async (req, res) => {
