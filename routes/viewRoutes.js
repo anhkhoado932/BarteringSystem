@@ -29,16 +29,15 @@ router.get('/registration-success', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/home');
+    }
     res.sendFile(path.join(__dirname, '../public', 'login.html'));
 });
 
 router.post('/login', userController.loginUser);
 
 router.get('/profile', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
     let products = await Product.find({ owner: req.session.user._id });
     let message = req.session.message || null;
     req.session.message = null;
