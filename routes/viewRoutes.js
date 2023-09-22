@@ -2,15 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user');
-const userController = require('../controller/userController');
 const productController = require('../controller/productController');
-const path = require('path');
-
-router.get('/', (req, res) => res.redirect('/home'))
-router.get('/home', (req, res) => {
-    let user = req.session.user;
-    res.render('home', { user: user });
-});
 
 router.get('/info', (req, res) => {
     let user = req.session.user;
@@ -26,25 +18,7 @@ router.get('/product-detail/:productId', async (req, res) => {
     res.render('product-detail', { product: product, user: user });
 });
 
-router.get('/register-page', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'register.html'));
-});
-
-router.get('/registration-success', (req, res) => {
-    res.render('registration-success');
-});
-
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'login.html'));
-});
-
-router.post('/login', userController.loginUser);
-
 router.get('/profile', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-
     let products = await Product.find({ owner: req.session.user._id });
     let message = req.session.message || null;
     req.session.message = null;

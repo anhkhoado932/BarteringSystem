@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
 
     $('#registerButton').click(function () {
-        window.location.href = '/register-page';
+        window.location.href = '/register';
     })
     $('#priceFilter').on('change', function () {
         let range = $(this).val();
