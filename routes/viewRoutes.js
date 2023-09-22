@@ -19,29 +19,41 @@ router.get('/product-detail/:productId', async (req, res) => {
 });
 
 router.get('/profile', async (req, res) => {
-    let products = await Product.find({ owner: req.session.user._id });
-    let message = req.session.message || null;
-    req.session.message = null;
+    try{
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
 
-    //get the products user clicked the favorite button
-    let userWithFavorites = await User.findById(req.session.user._id).populate('favorites');
+        let message = req.session.message || null;
+        req.session.message = null;
 
-    if (req.session.user.role === 'admin') {
-        const users = await User.find();
-        res.render('admin', {
-            user: req.session.user,
-            users: users,
-            products: products,
-            message: message
-        });
-    } else {
-        res.render('profile', {
-            user: req.session.user,
-            products: products,
-            message: message,
-            //let profile.ejs get the favoriteProducts
-            favoriteProducts: userWithFavorites.favorites
-        });
+        const [products, users, feedbacks] = await Promise.all([
+            Product.find(),
+            User.find(),
+            Feedback.find(),
+        
+        ]);
+
+        if (req.session.user.role === 'admin') {
+            return res.render('admin', {
+                user: req.session.user,
+                users,
+                products,
+                feedbacks,
+                message
+            });
+        }
+
+            res.render('profile', {
+                user: req.session.user,
+                products,
+                message,
+                //let profile.ejs get the favoriteProducts
+                favoriteProducts: userWithFavorites.favorites
+            });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
 
@@ -64,6 +76,31 @@ router.get('/search', async (req, res) => {
         console.error('Error during search:', error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+//admin edit user and product
+router.get('/edit-user/:id', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    res.render('edit-user', { user });
+});
+
+router.get('/edit-product/:id', async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    res.render('edit-product', { product });
+});
+
+router.post('/edit-user/:id', async (req, res) => {
+    const { id } = req.params;
+    const { username, email, role } = req.body;
+    await User.findByIdAndUpdate(id, { username, email, role });
+    res.redirect('/profile');
+});
+
+router.post('/edit-product/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, price, description } = req.body;
+    await Product.findByIdAndUpdate(id, { name, price, details: description });
+    res.redirect('/profile');
 });
 
 module.exports = router;

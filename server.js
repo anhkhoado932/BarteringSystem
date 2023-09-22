@@ -17,6 +17,7 @@ const io = require('socket.io')(http);
 const authMiddleware = require('./middlewares/auth')
 connectDB();
 
+//Session Configuration
 const sessionMiddleware = session({
     secret: 'your_secret_key',
     resave: false,
@@ -25,6 +26,7 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
+//body parser configuration
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
