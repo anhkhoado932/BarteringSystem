@@ -1,152 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include("partials/header.ejs", {title: "Bartering System"}) %>
+<%- include("partials/header.ejs", {title: "Bartering System" }) %>
 
-<body>
-    <div class="font2 bg" align="center">
-        Welcome to the Bartering System
-    </div>
-    <div class="container">
-        <%- include("partials/navbar") %>
-
-        <!-- banner -->
-        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="images/banner1.jpg" class="d-block w-100" alt="banner1">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h4 class="font">Swap, Don't Shop!</a></h4>
-                        <p class="font">Trade household items easily and sustainably.</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/banner2.jpg" class="d-block w-100" alt="banner2">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h4 class="font">Trade Today, Treasure Tomorrow!</a></h4>
-                        <p class="font">Turn your unused items into someone else's treasure.</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/banner3.jpg" class="d-block w-100" alt="banner3">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h4 class="font">Embrace The batering Revolution!</a></h4>
-                        <p class="font">Rediscover the joy of trading, one item at a time.</p>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+    <body>
+        <div class="font2 bg" align="center">
+            Welcome to the Bartering System
         </div>
-        <!-- banner end -->
+        <div class="container">
+            <%- include("partials/navbar") %>
+                <!-- an invisible code for the notification feature -->
+                <div id="homePage" style="display: none;"></div>
 
-        <main class="my-5 font5">
-            <hr class="my-5">
-            <h1 align="center">Feature Introduction</h1>
-            <div class="my-5">
-                <div class="row">
-                    <div class="col-sm-6"><img src="images/search.jpeg" class="img-fluid feature-size" alt="search">
+                <!-- banner -->
+                <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="images/banner1.jpg" class="d-block w-100" alt="banner1">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h4 class="font">Swap, Don't Shop!</a></h4>
+                                <p class="font">Trade household items easily and sustainably.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/banner2.jpg" class="d-block w-100" alt="banner2">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h4 class="font">Trade Today, Treasure Tomorrow!</a></h4>
+                                <p class="font">Turn your unused items into someone else's treasure.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/banner3.jpg" class="d-block w-100" alt="banner3">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h4 class="font">Embrace The batering Revolution!</a></h4>
+                                <p class="font">Rediscover the joy of trading, one item at a time.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6 center-text">
-                        <a><span class="fs-3">Dive into our extensive database to find the exact item you're looking
-                                for. Use keywords or categories to narrow down your search and discover items available
-                                for trade.</span></a>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <!-- banner end -->
+
+                <main class="my-5 font5">
+                    <hr class="my-5">
+                    <h1 align="center">Feature Introduction</h1>
+                    <div class="my-5">
+                        <div class="row">
+                            <div class="col-sm-6"><img src="images/search.jpeg" class="img-fluid feature-size"
+                                    alt="search">
+                            </div>
+                            <div class="col-sm-6 center-text">
+                                <a><span class="fs-3">Dive into our extensive database to find the exact item you're
+                                        looking
+                                        for. Use keywords or categories to narrow down your search and discover items
+                                        available
+                                        for trade.</span></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="my-5">
-                <div class="row">
-                    <div class="col-sm-6 center-text">
-                        <a><span class="fs-3">Listing your items is a breeze. Take a picture, add a brief description,
-                                determine its approximate value, and you're ready to trade! Make your unused items
-                                available to others and find value in exchange.</span></a>
+                    <div class="my-5">
+                        <div class="row">
+                            <div class="col-sm-6 center-text">
+                                <a><span class="fs-3">Listing your items is a breeze. Take a picture, add a brief
+                                        description,
+                                        determine its approximate value, and you're ready to trade! Make your unused
+                                        items
+                                        available to others and find value in exchange.</span></a>
+                            </div>
+                            <div class="col-sm-6"><img src="images/upload.png" class="img-fluid feature-size"
+                                    alt="upload">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6"><img src="images/upload.png" class="img-fluid feature-size" alt="upload">
+
+
+                    <hr class="my-5">
+                    <h1 class="text-center mb-5">How to Use Our batering System: A Step-by-Step Guide</h1>
+
+                    <div class="mb-4">
+                        <h4 class="mb-3">Select and List Your Item:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Start by choosing an item you wish to exchange. Make sure it's
+                                in decent
+                                condition, so it's appealing for other users.</li>
+                            <li class="list-group-item">Once selected, navigate to the "Upload Item" section of our
+                                platform.
+                            </li>
+                            <li class="list-group-item">Provide all the necessary details about the item, including a
+                                clear
+                                photograph, a brief description, and its approximate value.</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
 
+                    <div class="mb-4">
+                        <h4 class="mb-3">Search for Equivalent Items:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Dive into our vast collection of items available for trade.
+                                Utilize the
+                                search bar to input keywords or item names to find potential matches.</li>
+                            <li class="list-group-item">For a more precise search, use the filter options. Filter by
+                                value range
+                                to find items that match the value of what you're offering.</li>
+                            <li class="list-group-item">Browse through the search results, read the descriptions, and
+                                view the
+                                photos to decide if you're interested in any of the listed items.</li>
+                        </ul>
+                    </div>
 
-            <hr class="my-5">
-            <h1 class="text-center mb-5">How to Use Our batering System: A Step-by-Step Guide</h1>
+                    <div class="mb-4">
+                        <h4 class="mb-3">Choose and Confirm Trade Partner:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Once you've found an item you're interested in, click on the
+                                "Trade" or
+                                "Swap" button next to the item listing.</li>
+                            <li class="list-group-item">You'll be taken to a page where you can view more details about
+                                the item
+                                and the user offering it.</li>
+                            <li class="list-group-item">If everything looks good, click on the "Confirm Trade" button.
+                                This will
+                                notify the other user of your interest in trading.</li>
+                        </ul>
+                    </div>
 
-            <div class="mb-4">
-                <h4 class="mb-3">Select and List Your Item:</h4>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Start by choosing an item you wish to exchange. Make sure it's in decent
-                        condition, so it's appealing for other users.</li>
-                    <li class="list-group-item">Once selected, navigate to the "Upload Item" section of our platform.
-                    </li>
-                    <li class="list-group-item">Provide all the necessary details about the item, including a clear
-                        photograph, a brief description, and its approximate value.</li>
-                </ul>
-            </div>
+                    <div class="mb-4">
+                        <h4 class="mb-3">Provide Shipping Details:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">After confirming the trade, you'll be prompted to input your
+                                shipping
+                                address. Make sure to provide accurate details to ensure smooth delivery.</li>
+                            <li class="list-group-item">Confirm the shipping address and click on the "Complete Trade"
+                                button.
+                            </li>
+                            <li class="list-group-item">The other user will receive a notification and will provide
+                                their
+                                shipping details in return.</li>
+                        </ul>
+                    </div>
 
-            <div class="mb-4">
-                <h4 class="mb-3">Search for Equivalent Items:</h4>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Dive into our vast collection of items available for trade. Utilize the
-                        search bar to input keywords or item names to find potential matches.</li>
-                    <li class="list-group-item">For a more precise search, use the filter options. Filter by value range
-                        to find items that match the value of what you're offering.</li>
-                    <li class="list-group-item">Browse through the search results, read the descriptions, and view the
-                        photos to decide if you're interested in any of the listed items.</li>
-                </ul>
-            </div>
+                    <hr class="my-5">
+                    <h1 align="center">Benefits of Our batering Platform</h1>
+                    <div class="row">
+                        <div class="col-sm-6 image-container">
+                            <img src="images/CostSaving.jpg" class="img-thumbnail" alt="CostSaving">
+                            <div class="image-text2">Cost Saving</div>
+                        </div>
+                        <div class="col-sm-6 image-container">
+                            <img src="images/EcoFriendly.jpg" class="img-thumbnail" alt="EcoFriendly">
+                            <div class="image-text2">Eco-Friendly</div>
+                        </div>
+                    </div>
+                </main>
 
-            <div class="mb-4">
-                <h4 class="mb-3">Choose and Confirm Trade Partner:</h4>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Once you've found an item you're interested in, click on the "Trade" or
-                        "Swap" button next to the item listing.</li>
-                    <li class="list-group-item">You'll be taken to a page where you can view more details about the item
-                        and the user offering it.</li>
-                    <li class="list-group-item">If everything looks good, click on the "Confirm Trade" button. This will
-                        notify the other user of your interest in trading.</li>
-                </ul>
-            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/navbar.js"></script>
 
-            <div class="mb-4">
-                <h4 class="mb-3">Provide Shipping Details:</h4>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">After confirming the trade, you'll be prompted to input your shipping
-                        address. Make sure to provide accurate details to ensure smooth delivery.</li>
-                    <li class="list-group-item">Confirm the shipping address and click on the "Complete Trade" button.
-                    </li>
-                    <li class="list-group-item">The other user will receive a notification and will provide their
-                        shipping details in return.</li>
-                </ul>
-            </div>
+    </body>
+    <%- include("partials/footer.ejs") %>
 
-            <hr class="my-5">
-            <h1 align="center">Benefits of Our batering Platform</h1>
-            <div class="row">
-                <div class="col-sm-6 image-container">
-                    <img src="images/CostSaving.jpg" class="img-thumbnail" alt="CostSaving">
-                    <div class="image-text2">Cost Saving</div>
-                </div>
-                <div class="col-sm-6 image-container">
-                    <img src="images/EcoFriendly.jpg" class="img-thumbnail" alt="EcoFriendly">
-                    <div class="image-text2">Eco-Friendly</div>
-                </div>
-            </div>
-        </main>
-
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="/js/script.js"></script>
-    <script src="/js/navbar.js"></script>
-
-</body>
-<%- include("partials/footer.ejs") %>
 </html>

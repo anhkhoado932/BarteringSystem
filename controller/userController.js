@@ -50,6 +50,9 @@ exports.loginUser = async (req, res) => {
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
             req.session.user = user;
+            //use session to store whether the notification has displayed or not 
+            //For the first time user login, the value is always false.
+            req.session.hasDisplayedNotification = false;
 
             // Store welcome message in the session
             req.session.welcomeMessage = `Welcome, ${user.name}!`;
