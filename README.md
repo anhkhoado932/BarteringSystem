@@ -20,12 +20,6 @@ git clone https://github.com/anhkhoado932/BarteringSystem.git
 ```
 npm install
 ```
-
-### Configure environment
-
--   In the project folder, create `.env` file
--   Copy the content from `.env.example` to `.env`
--   change the DB_URI to your own URI from class
 ### Start project
 
 ```

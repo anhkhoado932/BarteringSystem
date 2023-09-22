@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const session = require("express-session");
 const app = express();
@@ -6,7 +7,6 @@ const connectDB = require('./dbConnection');
 const productRoutes = require('./routes/productRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 const viewRoutes = require('./routes/viewRoutes');
-const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
@@ -31,22 +31,21 @@ app.use(express.json());
 // Static files
 app.use(express.static(__dirname + '/public'));
 
+// Public routes does not require authentication
 app.use('/', publicRoutes);
 
 app.use(authMiddleware);
 
 app.use('/', viewRoutes);
 app.use('/product', productRoutes);
-app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
 app.use('/message', messageRoutes);
 
 app.set('view engine', 'ejs');
 
-const PORT = 3000;
-http.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+http.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 
