@@ -31,7 +31,7 @@ exports.registerUser = async (req, res) => {
             email,
             name,
             password: hashedPassword,
-            role: 'role',
+            role: 'user',
         });
 
         await user.save();
@@ -73,7 +73,7 @@ exports.loginUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
-        res.stutus(200).json({ messgae: 'User deleted' });
+        res.status(200).json({ messgae: 'User deleted' });
     } catch (error) {
         res.status(500).json({ message: 'Internet server error' });
     }

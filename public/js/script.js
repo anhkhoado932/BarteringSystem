@@ -70,7 +70,7 @@ $(document).ready(function () {
         if (item === "favorite") {
             url = `/product/removeFromFavorites/${id}`;
         } else {
-            url = `/${item}s/${id}`;
+            url = `/${item}/${id}`;
         }
         console.log("URL to delete:", url);
 

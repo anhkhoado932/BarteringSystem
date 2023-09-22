@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include("partials/header.ejs", {title: "Thanks for your feedback" }) %>
+<%- include("partials/header.ejs", {title: "Bartering System" }) %>
 
     <body>
         <div class="container">
@@ -39,7 +39,7 @@
                                             <%= user.role %>
                                         </td>
                                         <td>
-                                            <button class="btn btn-secondary edit-user-btn"
+                                            <button class="btn btn-secondary edit-user-btn me-1"
                                                 data-user-id="<%= user._id %>">Edit</button>
                                             <button class="btn btn-danger delete-user-btn" data-item="user"
                                                 data-user-id="<%= user._id %>">Delete</button>
@@ -58,7 +58,7 @@
                                     <th>Image</th>
                                     <th>Price</th>
                                     <th>Details</th>
-                                    <th>Action</th>
+                                    <th style="width: 200px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,7 +75,7 @@
                                             <%= product.details %>
                                         </td>
                                         <td>
-                                            <button class="btn btn-secondary edit-product-btn"
+                                            <button class="btn btn-secondary edit-product-btn me-1"
                                                 data-product-id="<%= product._id %>">Edit</button>
                                             <button class="btn btn-danger delete-product-btn" data-item="product"
                                                 data-product-id="<%= product._id %>">Delete</button>

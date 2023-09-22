@@ -11,6 +11,7 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const userRoutes = require('./routes/userRoutes');
 const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -39,11 +40,12 @@ app.use('/', publicRoutes);
 
 app.use(authMiddleware);
 app.use('/notifications', notificationRoutes);
-app.use('/', viewRoutes);
 app.use('/product', productRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
 app.use('/message', messageRoutes);
+app.use('/user', userRoutes);
+app.use('/', viewRoutes);
 
 app.set('view engine', 'ejs');
 
