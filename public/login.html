@@ -55,11 +55,11 @@
             e.preventDefault();
 
             // if exist a redirect path, append it to the request URL
-            const url = "/login";
+            let url = "/login";
             const params = new URLSearchParams(window.location.search);
             const redirect = params.get("redirect");
             if (redirect) {
-                url.concat(`?redirect=${redirect}`);
+                url = url.concat(`?redirect=${redirect}`);
             }
 
             $.ajax({
