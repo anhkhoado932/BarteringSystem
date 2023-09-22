@@ -49,6 +49,8 @@ exports.loginUser = async (req, res) => {
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
             req.session.user = user;
+            // Store welcome message in the session
+            req.session.welcomeMessage = `Welcome, ${user.name}!`;
             
             // Redirect to original route if exist, else redirect home
             const redirect = req.query.redirect ?? '/home';

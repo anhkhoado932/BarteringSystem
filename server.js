@@ -10,6 +10,7 @@ const viewRoutes = require('./routes/viewRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -33,7 +34,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Public routes does not require authentication
 app.use('/', publicRoutes);
-
+app.use('/notifications', notificationRoutes);
 app.use(authMiddleware);
 
 app.use('/', viewRoutes);
