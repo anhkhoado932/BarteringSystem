@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user');
+const Feedback = require('../models/feedback');
 const productController = require('../controller/productController');
 
 router.get('/info', (req, res) => {
@@ -19,23 +20,27 @@ router.get('/product-detail/:productId', async (req, res) => {
 });
 
 router.get('/profile', async (req, res) => {
-    let products = await Product.find({ owner: req.session.user._id });
+
     let message = req.session.message || null;
     req.session.message = null;
 
+    // For users, only get the products they own
+    // For admins, get all products
+    let productsQuery = (req.session.user.role === 'admin') ? Product.find() : Product.find({ owner: req.session.user._id });
+
+    let products = await productsQuery;
+
     //get the products user clicked the favorite button
     let userWithFavorites = await User.findById(req.session.user._id).populate('favorites');
-    // const [products, users, feedbacks] = await Promise.all([
-    //     Product.find(),
-    //     User.find(),
-    //     Feedback.find(),
-    // ]);
+
     if (req.session.user.role === 'admin') {
         const users = await User.find();
+        const feedbacks = await Feedback.find();
         res.render('admin', {
             user: req.session.user,
             users: users,
             products: products,
+            feedbacks: feedbacks,
             message: message
         });
     } else {
