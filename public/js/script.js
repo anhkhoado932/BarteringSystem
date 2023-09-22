@@ -30,13 +30,7 @@ $(document).ready(function () {
             url: url,
             type: 'DELETE',
             success: function (result) {
-                $('#message').text(`The ${item} has been ${(item === 'favorite') ? 'removed from favorites' : 'deleted'}`).css({
-                    'background-color': 'green',
-                    'text-align': 'center',
-                    'padding': '10px',
-                    'color': 'white'
-                }).fadeIn().delay(3000).fadeOut();
-
+                $('#message').text(`The ${item} has been ${(item === 'favorite') ? 'removed from favorites' : 'deleted'}`).fadeIn().delay(3000).fadeOut();
                 setTimeout(() => {
                     location.reload();
                 }, 3100);

@@ -117,20 +117,25 @@ exports.addToFavorites = async (req, res) => {
 };
 
 exports.removeFromFavorites = async (req, res) => {
+    console.log("Received request to delete product from favorites with ID:", req.params.id);
     const userId = req.session.user._id;
-    const ObjectId = require('mongoose').Types.ObjectId;
-    const productId = new ObjectId(req.body.productId);
+    const productId = req.params.id;
 
     try {
-        const user = await User.findById(userId);
-        const productIndex = user.favorites.indexOf(productId);
-        if (productIndex > -1) {
-            user.favorites.splice(productIndex, 1);
-            await user.save();
+        const result = await User.updateOne(
+            { _id: userId },
+            { $pull: { favorites: productId } }
+        );
+        if (result.nModified === 0) {
+            console.log("No documents were updated. Product was not in favorites?");
+        } else {
+            console.log("Product successfully removed from favorites.");
         }
+
         res.json({ success: true, message: 'Product removed from favorites.' });
 
     } catch (error) {
+        console.error("Error during removeFromFavorites:", error);
         res.json({ success: false, message: error.message });
     }
 };
