@@ -5,7 +5,52 @@ $(document).ready(function () {
         });
     }, 3000); // 3 seconds
 
-    $('.cancel-btn, .remove-fav-btn').on('click', function () {
+    //get the latest notifications
+    function fetchLatestNotification() {
+        $.ajax({
+            url: '/notifications/latest',
+            method: 'GET',
+            success: function (response) {
+                if (response && response.message && response.message !== "No active notifications") {
+                    displayNotification(response.message);
+                } else if (response && response.welcomeMessage) {
+                    displayNotification(response.welcomeMessage);
+                }
+            },
+            error: function (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        });
+    }
+
+    //display notification
+    function displayNotification(message) {
+        const notificationHTML = `
+            <div class="notification-banner">
+            ${message}
+            <button class="close-notification">X</button>
+            </div>
+            `;
+
+        $("body").prepend(notificationHTML);
+        $(".notification-banner").slideDown();
+
+        $(".close-notification").on("click", function () {
+            $(".notification-banner").slideUp(function () {
+                $(this).remove();
+            });
+        });
+        setTimeout(function () {
+            $(".notification-banner").slideUp(function () {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+    fetchLatestNotification();
+
+    $('.cancel-btn, .remove-fav-btn, .delete-user-btn, .delete-product-btn, .delete-feedback-btn').on('click', function () {
+
         const item = $(this).data('item');
 
         //if the id is favorite id, it should be the same as product id
@@ -44,5 +89,15 @@ $(document).ready(function () {
     $('#priceFilter').on('change', function () {
         let range = $(this).val();
         window.location.href = "/product?priceRange=" + range;
+    });
+
+    $('.edit-user-btn').click(function () {
+        const userId = $(this).data('user-id');
+        window.location.href = `/edit-user/${userId}`;
+    });
+
+    $('.edit-product-btn').click(function () {
+        const productId = $(this).data('product-id');
+        window.location.href = `/edit-product/${productId}`;
     });
 });
