@@ -48,10 +48,12 @@ $(document).ready(function () {
         }, 5000);
     }
 
-    fetchLatestNotification();
+    if ($("#homePage").length) {
+        fetchLatestNotification();
+    }
 
     $('.cancel-btn, .remove-fav-btn, .delete-user-btn, .delete-product-btn, .delete-feedback-btn').on('click', function () {
-      
+
         const item = $(this).data('item');
 
         //if the id is favorite id, it should be the same as product id

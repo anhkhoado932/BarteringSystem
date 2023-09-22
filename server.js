@@ -36,9 +36,9 @@ app.use(express.static(__dirname + '/public'));
 
 // Public routes does not require authentication
 app.use('/', publicRoutes);
-app.use('/notifications', notificationRoutes);
-app.use(authMiddleware);
 
+app.use(authMiddleware);
+app.use('/notifications', notificationRoutes);
 app.use('/', viewRoutes);
 app.use('/product', productRoutes);
 app.use('/feedback', feedbackRoutes);
