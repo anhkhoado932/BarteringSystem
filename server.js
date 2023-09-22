@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
@@ -8,23 +9,30 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const Message = require('./models/message');
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const http = require('http').createServer(app);//not sure
+const io = require('socket.io')(http);//not sure
 
 connectDB();
 
-const sessionMiddleware = session({
+//Session Configuration
+app.use(session({
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: true,
-});
+}));
+
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
+//body parser configuration
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
+
+//Registering view routes
 app.use('/', viewRoutes);
+
+//Registering API routes----
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
@@ -33,6 +41,7 @@ app.use('/message', messageRoutes);
 // Static files
 app.use(express.static(__dirname + '/public'));
 
+//View Engine Configuration
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
