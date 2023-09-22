@@ -31,6 +31,7 @@ exports.registerUser = async (req, res) => {
             email,
             name,
             password: hashedPassword,
+            role:'user',
         });
 
         await user.save();
@@ -49,6 +50,8 @@ exports.loginUser = async (req, res) => {
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
             req.session.user = user;
+            // Store welcome message in the session
+            req.session.welcomeMessage = `Welcome, ${user.name}!`;
             
             // Redirect to original route if exist, else redirect home
             const redirect = req.query.redirect ?? '/home';
@@ -62,3 +65,12 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.stutus(200).json({messgae: 'User deleted' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internet server error' });
+    }
+}

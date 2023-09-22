@@ -10,12 +10,14 @@ const viewRoutes = require('./routes/viewRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const authMiddleware = require('./middlewares/auth')
 connectDB();
 
+//Session Configuration
 const sessionMiddleware = session({
     secret: 'your_secret_key',
     resave: false,
@@ -24,6 +26,7 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
+//body parser configuration
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -33,7 +36,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Public routes does not require authentication
 app.use('/', publicRoutes);
-
+app.use('/notifications', notificationRoutes);
 app.use(authMiddleware);
 
 app.use('/', viewRoutes);
