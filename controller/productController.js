@@ -56,6 +56,11 @@ exports.deleteProduct = async (req, res) => {
 
 exports.getProducts = async (req, res) => {
     try {
+        //check if the user has login or not, if not redirect to login page.
+        if (!req.session.user) {
+            return res.redirect('/login.html');
+        }
+
         let filter = {};
         if (req.query.priceRange) {
             switch (req.query.priceRange) {
