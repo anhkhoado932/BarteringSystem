@@ -17,12 +17,11 @@ const authMiddleware = require('./middlewares/auth')
 connectDB();
 
 //Session Configuration
-app.use(session({
+const sessionMiddleware = session({
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: true,
-}));
-
+});
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
