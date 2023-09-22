@@ -3,7 +3,7 @@ const router = express.Router();
 const Notification = require('../models/notification');
 
 router.get('/latest', async (req, res) => {
-    console.log("Session data:", req.session);
+    // console.log("Session data:", req.session);
     try {
         if (req.session.hasDisplayedNotification) {
             return res.json({ message: "No active notifications" });
