@@ -5,6 +5,50 @@ $(document).ready(function () {
         });
     }, 3000); // 3 seconds
 
+    //get the latest notifications
+    function fetchLatestNotification() {
+        $.ajax({
+            url: '/notifications/latest',
+            method: 'GET',
+            success: function (response) {
+                if (response && response.message && response.message !== "No active notifications") {
+                    displayNotification(response.message);
+                } else if (response && response.welcomeMessage) {
+                    displayNotification(response.welcomeMessage);
+                }
+            },
+            error: function (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        });
+    }
+
+    //display notification
+    function displayNotification(message) {
+        const notificationHTML = `
+        <div class="notification-banner">
+            ${message}
+            <button class="close-notification">X</button>
+        </div>
+    `;
+
+        $("body").prepend(notificationHTML);
+        $(".notification-banner").slideDown();
+
+        $(".close-notification").on("click", function () {
+            $(".notification-banner").slideUp(function () {
+                $(this).remove();
+            });
+        });
+        setTimeout(function () {
+            $(".notification-banner").slideUp(function () {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+    fetchLatestNotification();
+
     $('.cancel-btn, .remove-fav-btn').on('click', function () {
         const item = $(this).data('item');
 
