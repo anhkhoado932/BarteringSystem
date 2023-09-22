@@ -2,7 +2,10 @@ const ObjectId = require("mongodb").ObjectId;
 const productModel = require("../models/product");
 const transactionModel = require("../models/transaction");
 
+
 exports.getTransaction = (req, res) => {
+
+
     const user = req.session.user;
     const { _id } = user;
     transactionModel
@@ -97,16 +100,16 @@ exports.finishTransaction = async (req, res) => {
     }
     else if (currentTransaction.status == "active") {
         currentTransaction.status = isUser1 ? "pending_user2" : "pending_user1";
-    } 
+    }
     currentTransaction
         .save()
         .then((t) => {
-            res.send({ redirect: "/transaction"});
+            res.send({ redirect: "/transaction" });
 
             // cancel all transaction involving these product
-            if (t.status == "finished"){
+            if (t.status == "finished") {
                 const transactedProductIds = [
-                    ...currentTransaction.products1, 
+                    ...currentTransaction.products1,
                     ...currentTransaction.products2
                 ];
                 transactionModel.updateMany({
