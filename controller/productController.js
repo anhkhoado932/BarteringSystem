@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const Product = require('../models/product');
+const User = require('../models/user');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -98,3 +99,38 @@ exports.getProductsByUser = async (req, res) => {
             res.status(200).send(products);
         })
 }
+
+exports.addToFavorites = async (req, res) => {
+    const productId = req.body.productId;
+    const userId = req.session.user._id;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user.favorites.includes(productId)) {
+            user.favorites.push(productId);
+            await user.save();
+        }
+        res.json({ success: true });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+exports.removeFromFavorites = async (req, res) => {
+    const userId = req.session.user._id;
+    const ObjectId = require('mongoose').Types.ObjectId;
+    const productId = new ObjectId(req.body.productId);
+
+    try {
+        const user = await User.findById(userId);
+        const productIndex = user.favorites.indexOf(productId);
+        if (productIndex > -1) {
+            user.favorites.splice(productIndex, 1);
+            await user.save();
+        }
+        res.json({ success: true, message: 'Product removed from favorites.' });
+
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};

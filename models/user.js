@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
+    //save the products that user liked
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
 });
 
 const User = mongoose.model('User', userSchema);
