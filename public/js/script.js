@@ -48,9 +48,8 @@ $(document).ready(function () {
         }, 5000);
     }
 
-    if ($("#homePage").length) {
-        fetchLatestNotification();
-    }
+    fetchLatestNotification();
+
 
     $('.cancel-btn, .remove-fav-btn, .delete-user-btn, .delete-product-btn, .delete-feedback-btn').on('click', function () {
 
