@@ -38,7 +38,7 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
                 <div class="mt-3">
-                    <p>Don't have an account? <a href="/register-page">Register here</a></p>
+                    <p>Don't have an account? <a href="/register">Register here</a></p>
                 </div>
             </div>
         </div>
@@ -54,18 +54,18 @@
             // prevent default reloading
             e.preventDefault();
 
-            const login_path = "/login";
-            // if exist a redirect path, append it to the request
+            // if exist a redirect path, append it to the request URL
+            const url = "/login";
             const params = new URLSearchParams(window.location.search);
             const redirect = params.get("redirect");
             if (redirect) {
-                login_path.concat(`?redirect=${redirect}`);
+                url.concat(`?redirect=${redirect}`);
             }
 
             $.ajax({
                 data: $(this).serialize(),
                 type: "POST",
-                url: login_path,
+                url: url,
                 success: function(data) {
                     const repath = data.redirect;
                     window.location.href = repath;
