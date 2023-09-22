@@ -72,3 +72,4 @@ io.on("connection", (socket) => {
     socket.on("disconnect", async (message) => { });
 });
 
+module.exports = app;
