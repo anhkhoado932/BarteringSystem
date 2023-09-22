@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user');
 const userController = require('../controller/userController');
+const productController = require('../controller/productController');
 const path = require('path');
 
 router.get('/', (req, res) => res.redirect('/home'))
@@ -15,6 +16,8 @@ router.get('/info', (req, res) => {
     let user = req.session.user;
     res.render('info', { user: user });
 });
+
+router.get('/product', productController.getProducts);
 
 router.get('/product-detail/:productId', async (req, res) => {
     const productId = req.params.productId;
