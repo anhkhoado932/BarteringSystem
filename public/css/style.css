@@ -143,6 +143,7 @@ a:hover {
         }
     }
 }
+
 .transaction-container {
     height: 600px;
 
@@ -259,15 +260,15 @@ p[class^="from-"] {
     width: fit-content;
 }
 
-p.from-me ~ p.from-me {
+p.from-me~p.from-me {
     margin: 0.25rem 0 0;
 }
 
-p.from-me ~ p.from-me:not(:last-child) {
+p.from-me~p.from-me:not(:last-child) {
     margin: 0.25rem 0 0;
 }
 
-p.from-me ~ p.from-me:last-child {
+p.from-me~p.from-me:last-child {
     margin-bottom: 0.5rem;
 }
 
@@ -303,4 +304,22 @@ p[class^="from-"].emoji::before {
 
 .no-tail::before {
     display: none;
+}
+
+.card-img-top-popover {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+#message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: none;
+    background-color: green;
+    text-align: center;
+    padding: 10px;
+    color: white;
 }

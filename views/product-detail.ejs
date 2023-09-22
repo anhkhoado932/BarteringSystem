@@ -1,119 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+<%- include("partials/header.ejs", {title: "Product Details" }) %>
 
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="../style.css">
+    <body>
+        <div class="font2 bg" align="center">
+            Welcome to the Bartering System
+        </div>
+        <div class="container">
+            <%- include("partials/navbar") %>
 
-    <!-- font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2? family=Josefin+Slab&family=Karla&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather">
-</head>
+                <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+                <h1>
+                    <%= product.name %>
+                </h1>
+                <p>Price: <%= product.price %>
+                </p>
+                <p>Details: <%= product.details %>
+                </p>
 
-<body>
-    <div class="font2 bg" align="center">
-        Welcome to the Bartering System
-    </div>
-    <div class="container">
-        <nav class="my-2">
-            <form action="/search" method="GET" class="d-flex gap-2">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="term">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <ul class="nav nav-pills nav-fill my-3">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/home">HOME</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/item">ITEMS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/transaction">TRANSACTION</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/info">INFO</a>
-                </li>
-                <li class="nav-item d-flex align-items-center">
-                    <div class="dropdown">
-                        <% if (user) { %>
-                            <a href="/profile" class="nav-link">Welcome, <%= user.name %></a>
-                            <% } else { %>
-                                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false" data-bs-auto-close="outside">
-                                    SIGN IN
-                                </button>
-                                <form class="dropdown-menu p-4" method="post" action="/login" style="min-width: 340px;">
-                                    <div class="mb-3">
-                                        <label for="Email" class="form-label">Email address</label>
-                                        <input type="email" class="form-control" id="Email" name="email"
-                                            placeholder="email@example.com">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="Password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="Password" name="password"
-                                            placeholder="Password">
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                                            <label class="form-check-label" for="dropdownCheck">
-                                                Remember me
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-primary">Sign in</button>
-                                        <button type="button" class="btn btn-primary"
-                                            id="registerButton">Register</button>
-                                    </div>
-                                </form>
-                                <% } %>
-                    </div>
-                </li>
-            </ul>
-        </nav>
+                <!-- favorite button -->
+                <button id="add-to-favorites" class="btn btn-secondary" onclick="addToFavorites()">
+                    Add to Favorites
+                </button>
 
-        <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
-        <h1>
-            <%= product.name %>
-        </h1>
-        <p>Price: <%= product.price %>
-        </p>
-        <p>Details: <%= product.details %>
-        </p>
-        <button class="btn btn-primary">Contact the Owner</button>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="../script.js"></script>
-</body>
-<footer class="font3 fs-6" align="center">
-    <div class="container">
-        <hr>
-        <table class="table table-borderless">
-            <tr>
-                <th scope="col"><a href="/info#ContactUs" class="black">Contact Us</a></th>
-                <th scope="col"><a href="/info#About" class="black">About</a></th>
-                <th scope="col"><a href="/info#FAQs" class="black">FAQs</a></th>
-            </tr>
-        </table>
-        <p> &copy; Website designed by Vegetable Dog Team. Last updated 18/08/2023.</p>
-    </div>
-</footer>
+                <button id="start-transaction-popover" class="btn btn-primary" data-bs-toggle="popover"
+                    data-bs-container="body" data-bs-placement="right" data-bs-content="hallo">
+                    Start Transaction
+                </button>
+        </div>
+        <div id="product-data" product-data="<%= product._id.toString() %>"></div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/navbar.js"></script>
+        <script>
+            const onStartTransaction = (productId1) => {
+                const productId2 = $('#product-data').attr('product-data');
+                $.ajax({
+                    url: "/transaction",
+                    type: "POST",
+                    data: {
+                        productId1,
+                        productId2
+                    },
+                    success: function (data) {
+                        if (typeof data.redirect == 'string')
+                            window.location = data.redirect
+                    }
+                })
+            }
+            $(document).ready(function () {
+                var popover = new bootstrap.Popover($('#start-transaction-popover'));
+            })
+            $(document).ready(function () {
+                $("#start-transaction-popover").popover({
+                    trigger: "click",
+                    html: true,
+                    sanitize: false
+                })
+
+                $.ajax({
+                    url: `/product/current-user`,
+                    type: "GET",
+                    beforeSend: () => {
+                        const popoverButton = $('#start-transaction-popover');
+                        popoverButton.attr('data-bs-content', `
+                        <div class="d-flex align-items-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                        `)
+                        // delete old popover
+                        bootstrap.Popover.getInstance(popoverButton).dispose();
+                        // append new popover
+                        const newPopover = new bootstrap.Popover(popoverButton, {
+                            html: true,
+                            sanitize: false
+                        });
+                        newPopover.update();
+                        // newPopover.show();
+                    },
+                    complete: (data) => {
+                        const popoverButton = $('#start-transaction-popover');
+                        const content = data.responseJSON?.map((product) => `
+                            <div class="mb-4">
+                                <div style="cursor: pointer">
+                                    <a onclick={onStartTransaction('${product._id}')}>
+                                        <img src="${product.imageUrl}" class="card-img-top card-img-top-popover" alt="${product.name}">
+                                    </a>
+                                </div>
+                                <b>${product.name}</b>
+                            </div>
+                        `).join(" ") || 'Please upload new product to continue';
+                        const contentWrapper = `
+                        <div style="height: 250px; overflow: auto"> 
+                            ${content}
+                        </div>
+                        `
+                        popoverButton.attr('data-bs-content', contentWrapper);
+
+                        // delete old popover
+                        bootstrap.Popover.getInstance(popoverButton).dispose();
+                        // append new popover
+                        const newPopover = new bootstrap.Popover(popoverButton, {
+                            html: true,
+                            sanitize: false
+                        });
+                        newPopover.update();
+                        // newPopover.show();
+                    }
+                })
+            })
+
+            function addToFavorites() {
+                const productId = $('#product-data').attr('product-data');
+                $.ajax({
+                    url: "/product/addToFavorites",
+                    type: "POST",
+                    data: {
+                        productId: productId
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            alert('Added to favorites successfully!');
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
+        </script>
+
+    </body>
+    <%- include("partials/footer.ejs") %>
 
 </html>

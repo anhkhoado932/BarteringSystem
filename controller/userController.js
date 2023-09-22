@@ -50,7 +50,10 @@ exports.loginUser = async (req, res) => {
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
             req.session.user = user;
-            res.render('login-success', { user });
+            
+            // Redirect to original route if exist, else redirect home
+            const redirect = req.query.redirect ?? '/home';
+            res.status(200).send({ redirect });
         }
         else {
             res.status(401).json({ message: "Invalid email or password" });

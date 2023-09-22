@@ -2,18 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const User = require('../models/user');
-const userController = require('../controller/userController');
-const path = require('path');
-
-router.get('/home', (req, res) => {
-    let user = req.session.user;
-    res.render('home', { user: user });
-});
+const productController = require('../controller/productController');
 
 router.get('/info', (req, res) => {
     let user = req.session.user;
     res.render('info', { user: user });
 });
+
+router.get('/product', productController.getProducts);
 
 router.get('/product-detail/:productId', async (req, res) => {
     const productId = req.params.productId;
@@ -22,53 +18,39 @@ router.get('/product-detail/:productId', async (req, res) => {
     res.render('product-detail', { product: product, user: user });
 });
 
-router.get('/register-page', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'register.html'));
-});
-
-router.get('/registration-success', (req, res) => {
-    res.render('registration-success');
-});
-
-router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'login.html'));
-});
-
-router.post('/login', userController.loginUser);
-router.post('/register', userController.registerUser)
-
 router.get('/profile', async (req, res) => {
     try{
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
 
-    let message = req.session.message || null;
-    req.session.message = null;
+        let message = req.session.message || null;
+        req.session.message = null;
 
-    const [products, users, feedbacks] = await Promise.all([
-        Product.find(),
-        User.find(),
-        Feedback.find(),
-    
-    ]);
+        const [products, users, feedbacks] = await Promise.all([
+            Product.find(),
+            User.find(),
+            Feedback.find(),
+        
+        ]);
 
-    if (req.session.user.role === 'admin') {
-        return res.render('admin', {
-            user: req.session.user,
-            users,
-            products,
-            feedbacks,
-            message
-        });
-    }
+        if (req.session.user.role === 'admin') {
+            return res.render('admin', {
+                user: req.session.user,
+                users,
+                products,
+                feedbacks,
+                message
+            });
+        }
 
-        res.render('profile', {
-            user: req.session.user,
-            products,
-            message
-        });
-
+            res.render('profile', {
+                user: req.session.user,
+                products,
+                message,
+                //let profile.ejs get the favoriteProducts
+                favoriteProducts: userWithFavorites.favorites
+            });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal Server Error');

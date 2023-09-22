@@ -1,15 +1,3 @@
-$(document).ready(function() {
-    $('#registerButton').click(function() {
-        window.location.href = '/register-page';
-    });
-    
-    $('#priceFilter').on('change', function() {
-        let range = $(this).val();
-        window.location.href = "/item?priceRange=" + range;
-    });
-});
-
-//TODO: transactionScript.js
 const socket = io().connect("http://localhost:3000");
 
 $(document).ready(function () {
@@ -43,7 +31,7 @@ function onOpeningChatbox() {
         "transactionId"
     );
     $.ajax({
-        url: `/message/${transactionId}?page=0`,
+        url: `/message/${transactionId}`,
         type: "GET",
         beforeSend: function () {
             $(".transaction-chatbox").html(`

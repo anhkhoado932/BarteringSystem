@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
         default: 'user',//default to 'user'
         enum: ['user', 'admin'] //'role' can only be one of these
     },
+
+    //save the products that user liked
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
 });
 
 const User = mongoose.model('User', userSchema);
