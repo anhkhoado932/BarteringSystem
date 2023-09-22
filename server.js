@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
 const productRoutes = require('./routes/productRoutes');
+const publicRoutes = require('./routes/publicRoutes');
 const viewRoutes = require('./routes/viewRoutes');
 const userRoutes = require('./routes/userRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
@@ -12,7 +13,7 @@ const messageRoutes = require('./routes/messageRoutes');
 const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-
+const authMiddleware = require('./middlewares/auth')
 connectDB();
 
 const sessionMiddleware = session({
@@ -26,19 +27,20 @@ io.engine.use(sessionMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
+
+// Static files
+app.use(express.static(__dirname + '/public'));
+
+app.use('/', publicRoutes);
+
+app.use(authMiddleware);
+
 app.use('/', viewRoutes);
-
 app.use('/product', productRoutes);
-
-
 app.use('/users', userRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/transaction', transactionRoutes);
 app.use('/message', messageRoutes);
-
-
-// Static files
-app.use(express.static(__dirname + '/public'));
 
 app.set('view engine', 'ejs');
 
