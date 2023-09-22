@@ -26,11 +26,12 @@ $(document).ready(function () {
     //display notification
     function displayNotification(message) {
         const notificationHTML = `
-            <div class="notification-banner">
+
+        <div class="notification-banner">
             ${message}
             <button class="close-notification">X</button>
-            </div>
-            `;
+        </div>
+    `;
 
         $("body").prepend(notificationHTML);
         $(".notification-banner").slideDown();
@@ -50,7 +51,7 @@ $(document).ready(function () {
     fetchLatestNotification();
 
     $('.cancel-btn, .remove-fav-btn, .delete-user-btn, .delete-product-btn, .delete-feedback-btn').on('click', function () {
-
+      
         const item = $(this).data('item');
 
         //if the id is favorite id, it should be the same as product id
