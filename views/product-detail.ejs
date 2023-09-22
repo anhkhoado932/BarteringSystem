@@ -11,23 +11,24 @@
         <div class="container">
             <%- include("partials/navbar") %>
 
-            <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
-            <h1>
-                <%= product.name %>
-            </h1>
-            <p>Price: <%= product.price %>
-            </p>
-            <p>Details: <%= product.details %>
-            </p>
-            <button 
-            id="start-transaction-popover" 
-            class="btn btn-primary"
-            data-bs-toggle="popover"
-            data-bs-container="body"
-            data-bs-placement="right"
-            data-bs-content="hallo">
-                Start Transaction
-            </button>        
+                <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+                <h1>
+                    <%= product.name %>
+                </h1>
+                <p>Price: <%= product.price %>
+                </p>
+                <p>Details: <%= product.details %>
+                </p>
+
+                <!-- favorite button -->
+                <button id="add-to-favorites" class="btn btn-secondary" onclick="addToFavorites()">
+                    Add to Favorites
+                </button>
+
+                <button id="start-transaction-popover" class="btn btn-primary" data-bs-toggle="popover"
+                    data-bs-container="body" data-bs-placement="right" data-bs-content="hallo">
+                    Start Transaction
+                </button>
         </div>
         <div id="product-data" product-data="<%= product._id.toString() %>"></div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -47,9 +48,9 @@
                         productId1,
                         productId2
                     },
-                    success: function(data) {
+                    success: function (data) {
                         if (typeof data.redirect == 'string')
-                        window.location = data.redirect
+                            window.location = data.redirect
                     }
                 })
             }
@@ -62,7 +63,7 @@
                     html: true,
                     sanitize: false
                 })
-    
+
                 $.ajax({
                     url: `/product/current-user`,
                     type: "GET",
@@ -78,9 +79,9 @@
                         // delete old popover
                         bootstrap.Popover.getInstance(popoverButton).dispose();
                         // append new popover
-                        const newPopover = new bootstrap.Popover(popoverButton, { 
+                        const newPopover = new bootstrap.Popover(popoverButton, {
                             html: true,
-                            sanitize: false 
+                            sanitize: false
                         });
                         newPopover.update();
                         // newPopover.show();
@@ -103,21 +104,39 @@
                         </div>
                         `
                         popoverButton.attr('data-bs-content', contentWrapper);
-    
+
                         // delete old popover
                         bootstrap.Popover.getInstance(popoverButton).dispose();
                         // append new popover
-                        const newPopover = new bootstrap.Popover(popoverButton, { 
+                        const newPopover = new bootstrap.Popover(popoverButton, {
                             html: true,
-                            sanitize: false 
+                            sanitize: false
                         });
                         newPopover.update();
                         // newPopover.show();
                     }
                 })
             })
+
+            function addToFavorites() {
+                const productId = $('#product-data').attr('product-data');
+                $.ajax({
+                    url: "/product/addToFavorites",
+                    type: "POST",
+                    data: {
+                        productId: productId
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            alert('Added to favorites successfully!');
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
         </script>
-    
+
     </body>
     <%- include("partials/footer.ejs") %>
 

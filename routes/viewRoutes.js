@@ -5,6 +5,7 @@ const User = require('../models/user');
 const userController = require('../controller/userController');
 const path = require('path');
 
+router.get('/', (req, res) => res.redirect('/home'))
 router.get('/home', (req, res) => {
     let user = req.session.user;
     res.render('home', { user: user });
@@ -45,6 +46,9 @@ router.get('/profile', async (req, res) => {
     let message = req.session.message || null;
     req.session.message = null;
 
+    //get the products user clicked the favorite button
+    let userWithFavorites = await User.findById(req.session.user._id).populate('favorites');
+
     if (req.session.user.role === 'admin') {
         const users = await User.find();
         res.render('admin', {
@@ -57,7 +61,9 @@ router.get('/profile', async (req, res) => {
         res.render('profile', {
             user: req.session.user,
             products: products,
-            message: message
+            message: message,
+            //let profile.ejs get the favoriteProducts
+            favoriteProducts: userWithFavorites.favorites
         });
     }
 });

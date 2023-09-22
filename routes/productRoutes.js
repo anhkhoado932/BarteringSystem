@@ -6,6 +6,7 @@ router.post('/uploadProduct', productController.uploadProductMiddleware, product
 router.delete('/:id', productController.deleteProduct);
 router.get('/', productController.getProducts);
 router.get('/current-user', productController.getProductsByUser);
-
+router.post('/addToFavorites', productController.addToFavorites);
+router.delete('/removeFromFavorites/:id', productController.removeFromFavorites);
 
 module.exports = router;
