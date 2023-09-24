@@ -3,10 +3,42 @@
 
 <%- include("partials/header.ejs", {title: "Thanks for your feedback"}) %>
 
+<head>
+    <style>
+        /* Custom CSS styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin-top: 50px;
+        }
+
+        .feedback-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 200px;
+        }
+    </style>
+</head>
+
 <body>
     <div class="container">
-        <h2>Thanks for your feedback</h2>
-        <a href="/home" class="btn btn-primary">Return to homepage</a>
+        <div class="row justify-content-center">
+            <div class="col-md-6 feedback-container">
+                <h2>Thanks for your feedback</h2>
+                <div class="text-center">
+                    <a href="/home" class="btn btn-primary">Return to homepage</a>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
