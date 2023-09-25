@@ -26,6 +26,11 @@ describe('Testing', function () {
             console.error('Setup failed:', err);
             throw err;
         }
+
+        chai.request(app).post('/login').send({
+            email: "test@gmail.com",
+            password: "123456"
+        })
         console.log("Before hook finished");
     });
 
@@ -35,7 +40,7 @@ describe('Testing', function () {
 
     describe('User Controller', function () {
         // register test
-        describe('POST /users/register', function () {
+        describe('POST /user/register', function () {
             it('should register a user', function (done) {
                 chai.request(app)
                     .post('/register?testing=true')
@@ -56,7 +61,7 @@ describe('Testing', function () {
         });
 
         // login test
-        describe('POST /users/login', function () {
+        describe('POST /user/login', function () {
             it('should login a user', async function () {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash('password', salt);
@@ -77,12 +82,13 @@ describe('Testing', function () {
         });
 
         // delete test
-        describe('DELETE /users/:id', function () {
+        describe('DELETE /user/:id', function () {
             it('should delete a user', async function () {
                 const uniqueEmail = `${Date.now()}@test.com`;
                 const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
                 const savedUser = await newUser.save();
                 const res = await chai.request(app).delete(`/user/${savedUser._id}`);
+                console.log(res.body);
 
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('message').to.equal('User deleted.');
@@ -121,7 +127,7 @@ describe('Testing', function () {
                 });
                 const savedFeedback = await newFeedback.save();
 
-                const res = await chai.request(app).delete(`/feedbacks/${savedFeedback._id}`);
+                const res = await chai.request(app).delete(`/feedback/${savedFeedback._id}`);
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
             });
