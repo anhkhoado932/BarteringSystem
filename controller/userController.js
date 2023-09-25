@@ -3,6 +3,7 @@ const User = require('../models/user');
 
 exports.registerUser = async (req, res) => {
     try {
+        console.log("Testing query param:", req.query.testing);
         console.log(req.body);
 
         const { email, name, password } = req.body;
@@ -36,6 +37,11 @@ exports.registerUser = async (req, res) => {
 
         await user.save();
 
+        // Check if testing mode is on
+        if (req.body.testing === 'true') {
+            return res.status(200).json({ message: 'Registration successful.' });
+        }
+
         res.redirect('/registration-success');
     } catch (error) {
         console.error("Registration Error:", error);
@@ -57,6 +63,11 @@ exports.loginUser = async (req, res) => {
             // Store welcome message in the session
             req.session.welcomeMessage = `Welcome, ${user.name}!`;
 
+            // Check if testing mode is on
+            if (req.body.testing === 'true') {
+                return res.status(200).json({ message: 'Login successful.' });
+            }
+
             // Redirect to original route if exist, else redirect home
             const redirect = req.query.redirect ?? '/home';
             res.status(200).send({ redirect });
@@ -73,7 +84,7 @@ exports.loginUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({ messgae: 'User deleted' });
+        res.status(200).json({ message: 'User deleted.' });
     } catch (error) {
         res.status(500).json({ message: 'Internet server error' });
     }

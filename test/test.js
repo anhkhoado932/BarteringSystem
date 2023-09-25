@@ -16,6 +16,7 @@ chai.use(chaiHttp);
 describe('Testing', function () {
     this.timeout(50000);
     before(async function () {
+        this.timeout(10000); //give time for db connection
         console.log("Before hook started");
         try {
             console.log("Trying to connect to DB");
@@ -37,8 +38,13 @@ describe('Testing', function () {
         describe('POST /users/register', function () {
             it('should register a user', function (done) {
                 chai.request(app)
-                    .post('/users/register')
-                    .send({ email: `test${Date.now()}@test.com`, name: 'Test', password: 'password' })
+                    .post('/register?testing=true')
+                    .send({
+                        email: `test${Date.now()}@test.com`,
+                        name: 'Test',
+                        password: 'password',
+                        testing: 'true'
+                    })
                     .end((err, res) => {
                         if (err) console.error("Error:", err.response.body);
                         expect(err).to.be.null;
@@ -59,26 +65,29 @@ describe('Testing', function () {
                 await newUser.save();
 
                 const res = await chai.request(app)
-                    .post('/users/login')
-                    .send({ email: newUser.email, password: 'password' });
-
+                    .post('/login?testing=true')
+                    .send({
+                        email: newUser.email,
+                        password: 'password',
+                        testing: 'true'
+                    });
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('message').to.equal('Login successful.');
             });
         });
 
-        // // delete test
-        // describe('DELETE /users/:id', function () {
-        //     it('should delete a user', async function () {
-        //         const uniqueEmail = `${Date.now()}@test.com`;
-        //         const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
-        //         const savedUser = await newUser.save();
-        //         const res = await chai.request(app).delete(`/users/${savedUser._id}`);
+        // delete test
+        describe('DELETE /users/:id', function () {
+            it('should delete a user', async function () {
+                const uniqueEmail = `${Date.now()}@test.com`;
+                const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
+                const savedUser = await newUser.save();
+                const res = await chai.request(app).delete(`/user/${savedUser._id}`);
 
-        //         expect(res).to.have.status(200);
-        //         expect(res.body).to.have.property('message').to.equal('User deleted.');
-        //     });
-        // });
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.property('message').to.equal('User deleted.');
+            });
+        });
     });
 
     describe('Feedback Controller', function () {
@@ -101,22 +110,22 @@ describe('Testing', function () {
             });
         });
 
-        // // Delete feedback test
-        // describe('DELETE /feedback/:id', function () {
-        //     it('should delete a feedback', async function () {
-        //         const newFeedback = new Feedback({
-        //             email: 'testemail@test.com',
-        //             name: 'Test User',
-        //             phone: '123-456-7890',
-        //             message: 'This is a test message.'
-        //         });
-        //         const savedFeedback = await newFeedback.save();
+        // Delete feedback test
+        describe('DELETE /feedback/:id', function () {
+            it('should delete a feedback', async function () {
+                const newFeedback = new Feedback({
+                    email: 'testemail@test.com',
+                    name: 'Test User',
+                    phone: '123-456-7890',
+                    message: 'This is a test message.'
+                });
+                const savedFeedback = await newFeedback.save();
 
-        //         const res = await chai.request(app).delete(`/feedbacks/${savedFeedback._id}`);
-        //         expect(res).to.have.status(200);
-        //         expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
-        //     });
-        // });
+                const res = await chai.request(app).delete(`/feedbacks/${savedFeedback._id}`);
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
+            });
+        });
     });
 
     describe('Product Controller', function () {
@@ -207,13 +216,13 @@ describe('Testing', function () {
                 });
             });
 
-            // //getAdminPage test
-            // it('should fetch all user feedbacks and listings for admin', async function () {
-            //     const res = await chai.request(app).get('/admin').set('Authorization', `Bearer ${token}`);
-            //     expect(res).to.have.status(200);
-            //     expect(res.body).to.have.property('products').that.is.an('array');
-            //     expect(res.body).to.have.property('feedbacks').that.is.an('array');
-            // });
+            //getAdminPage test
+            it('should fetch all user feedbacks and listings for admin', async function () {
+                const res = await chai.request(app).get('/admin').set('Authorization', `Bearer ${token}`);
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.property('products').that.is.an('array');
+                expect(res.body).to.have.property('feedbacks').that.is.an('array');
+            });
         });
     });
 });
