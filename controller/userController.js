@@ -3,9 +3,6 @@ const User = require('../models/user');
 
 exports.registerUser = async (req, res) => {
     try {
-        console.log("Testing query param:", req.query.testing);
-        console.log(req.body);
-
         const { email, name, password } = req.body;
 
         // check email, name and password are exsited or not
@@ -82,9 +79,7 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-    console.log("deleteUser called");
     try {
-        await User.findByIdAndDelete(req.params.id);
         const deletedUser = await User.findByIdAndDelete(req.params.id);
         if (!deletedUser) {
             return res.status(404).json({ message: 'User not found' });
