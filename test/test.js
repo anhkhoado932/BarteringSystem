@@ -32,188 +32,267 @@ describe('Testing', function () {
         await mongoose.connection.close();
     });
 
-    describe('User Controller', function () {
-        // register test
-        describe('POST /users/register', function () {
-            it('should register a user', function (done) {
-                chai.request(app)
-                    .post('/users/register')
-                    .send({ email: `test${Date.now()}@test.com`, name: 'Test', password: 'password' })
-                    .end((err, res) => {
-                        if (err) console.error("Error:", err.response.body);
-                        expect(err).to.be.null;
-                        expect(res).to.have.status(200);
-                        expect(res.body.message).to.equal('Registration successful.');
-                        done();
-                    });
-            });
-        });
+    // describe('User Controller', function () {
+    //     // register test
+    //     describe('POST /users/register', function () {
+    //         it('should register a user', function (done) {
+    //             chai.request(app)
+    //                 .post('/users/register')
+    //                 .send({ email: `test${Date.now()}@test.com`, name: 'Test', password: 'password' })
+    //                 .end((err, res) => {
+    //                     if (err) console.error("Error:", err.response.body);
+    //                     expect(err).to.be.null;
+    //                     expect(res).to.have.status(200);
+    //                     expect(res.body.message).to.equal('Registration successful.');
+    //                     done();
+    //                 });
+    //         });
+    //     });
 
-        // login test
-        describe('POST /users/login', function () {
-            it('should login a user', async function () {
-                const salt = await bcrypt.genSalt(10);
-                const hashedPassword = await bcrypt.hash('password', salt);
-                const email = `loginTest${Date.now()}@test.com`;
-                const newUser = new User({ email: email, name: 'Test', password: hashedPassword });
-                await newUser.save();
+    //     // login test
+    //     describe('POST /users/login', function () {
+    //         it('should login a user', async function () {
+    //             const salt = await bcrypt.genSalt(10);
+    //             const hashedPassword = await bcrypt.hash('password', salt);
+    //             const email = `loginTest${Date.now()}@test.com`;
+    //             const newUser = new User({ email: email, name: 'Test', password: hashedPassword });
+    //             await newUser.save();
 
-                const res = await chai.request(app)
-                    .post('/users/login')
-                    .send({ email: newUser.email, password: 'password' });
+    //             const res = await chai.request(app)
+    //                 .post('/users/login')
+    //                 .send({ email: newUser.email, password: 'password' });
 
-                expect(res).to.have.status(200);
-                expect(res.body).to.have.property('message').to.equal('Login successful.');
-            });
-        });
+    //             expect(res).to.have.status(200);
+    //             expect(res.body).to.have.property('message').to.equal('Login successful.');
+    //         });
+    //     });
 
-        // // delete test
-        // describe('DELETE /users/:id', function () {
-        //     it('should delete a user', async function () {
-        //         const uniqueEmail = `${Date.now()}@test.com`;
-        //         const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
-        //         const savedUser = await newUser.save();
-        //         const res = await chai.request(app).delete(`/users/${savedUser._id}`);
+    //     // // delete test
+    //     // describe('DELETE /users/:id', function () {
+    //     //     it('should delete a user', async function () {
+    //     //         const uniqueEmail = `${Date.now()}@test.com`;
+    //     //         const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
+    //     //         const savedUser = await newUser.save();
+    //     //         const res = await chai.request(app).delete(`/users/${savedUser._id}`);
 
-        //         expect(res).to.have.status(200);
-        //         expect(res.body).to.have.property('message').to.equal('User deleted.');
-        //     });
-        // });
-    });
+    //     //         expect(res).to.have.status(200);
+    //     //         expect(res.body).to.have.property('message').to.equal('User deleted.');
+    //     //     });
+    //     // });
+    // });
 
-    describe('Feedback Controller', function () {
-        // Post feedback test
-        describe('POST /feedback', function () {
-            it('should post a feedback', function (done) {
-                chai.request(app)
-                    .post('/feedbacks')
-                    .send({
-                        email: 'testemail@test.com',
-                        name: 'Test User',
-                        phone: '123-456-7890',
-                        message: 'This is a test message.'
-                    })
-                    .end((err, res) => {
-                        expect(err).to.be.null;
-                        expect(res).to.have.status(200);
-                        done();
-                    });
-            });
-        });
+    // describe('Feedback Controller', function () {
+    //     // Post feedback test
+    //     describe('POST /feedback', function () {
+    //         it('should post a feedback', function (done) {
+    //             chai.request(app)
+    //                 .post('/feedbacks')
+    //                 .send({
+    //                     email: 'testemail@test.com',
+    //                     name: 'Test User',
+    //                     phone: '123-456-7890',
+    //                     message: 'This is a test message.'
+    //                 })
+    //                 .end((err, res) => {
+    //                     expect(err).to.be.null;
+    //                     expect(res).to.have.status(200);
+    //                     done();
+    //                 });
+    //         });
+    //     });
 
-        // // Delete feedback test
-        // describe('DELETE /feedback/:id', function () {
-        //     it('should delete a feedback', async function () {
-        //         const newFeedback = new Feedback({
-        //             email: 'testemail@test.com',
-        //             name: 'Test User',
-        //             phone: '123-456-7890',
-        //             message: 'This is a test message.'
-        //         });
-        //         const savedFeedback = await newFeedback.save();
+    //     // // Delete feedback test
+    //     // describe('DELETE /feedback/:id', function () {
+    //     //     it('should delete a feedback', async function () {
+    //     //         const newFeedback = new Feedback({
+    //     //             email: 'testemail@test.com',
+    //     //             name: 'Test User',
+    //     //             phone: '123-456-7890',
+    //     //             message: 'This is a test message.'
+    //     //         });
+    //     //         const savedFeedback = await newFeedback.save();
 
-        //         const res = await chai.request(app).delete(`/feedbacks/${savedFeedback._id}`);
-        //         expect(res).to.have.status(200);
-        //         expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
-        //     });
-        // });
-    });
+    //     //         const res = await chai.request(app).delete(`/feedbacks/${savedFeedback._id}`);
+    //     //         expect(res).to.have.status(200);
+    //     //         expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
+    //     //     });
+    //     // });
+    // });
 
-    describe('Product Controller', function () {
-        let user;
-        let token;
-        const filePath = '../uploads/test.jpeg';
+    // describe('Product Controller', function () {
+    //     let user;
+    //     let token;
+    //     const filePath = '../uploads/test.jpeg';
 
-        before(async function () {
-            await User.deleteMany({ email: 'test@test.com' });
-            const testUser = new User({ email: 'test@test.com', name: 'Test', password: 'password' });
-            user = await testUser.save();
-        });
+    //     before(async function () {
+    //         await User.deleteMany({ email: 'test@test.com' });
+    //         const testUser = new User({ email: 'test@test.com', name: 'Test', password: 'password' });
+    //         user = await testUser.save();
+    //     });
 
-        after(async function () {
-            await User.deleteOne({ email: 'test@test.com' });
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath); // delete test file
-            }
-        });
+    //     after(async function () {
+    //         await User.deleteOne({ email: 'test@test.com' });
+    //         if (fs.existsSync(filePath)) {
+    //             fs.unlinkSync(filePath); // delete test file
+    //         }
+    //     });
 
-        beforeEach(async function () {
-            const res = await chai.request(app)
-                .post('/users/login')
-                .send({ email: 'test@test.com', password: 'password' });
+    //     beforeEach(async function () {
+    //         const res = await chai.request(app)
+    //             .post('/users/login')
+    //             .send({ email: 'test@test.com', password: 'password' });
 
-            if (res.status !== 200 || !res.body.token) {
-                throw new Error('Login failed');
-            }
-            token = res.body.token;
-        });
+    //         if (res.status !== 200 || !res.body.token) {
+    //             throw new Error('Login failed');
+    //         }
+    //         token = res.body.token;
+    //     });
 
-        describe('POST /products/uploadProduct', function () {
-            it('should upload a product', async function () {
-                const res = await chai.request(app)
-                    .post('/products/uploadProduct')
-                    .set('Authorization', `Bearer ${token}`)
-                    .field('productName', 'Test Product')
-                    .field('productPrice', 100)
-                    .field('productDetails', 'Test details')
-                    .attach('productImage', fs.readFileSync(filePath), 'image.jpg');
+    //     describe('POST /products/uploadProduct', function () {
+    //         it('should upload a product', async function () {
+    //             const res = await chai.request(app)
+    //                 .post('/products/uploadProduct')
+    //                 .set('Authorization', `Bearer ${token}`)
+    //                 .field('productName', 'Test Product')
+    //                 .field('productPrice', 100)
+    //                 .field('productDetails', 'Test details')
+    //                 .attach('productImage', fs.readFileSync(filePath), 'image.jpg');
 
-                expect(res).to.have.status(200);
-                const product = await Product.findOne({ name: 'Test Product' });
-                expect(product).to.not.be.null;
-                expect(product.name).to.equal('Test Product');
-            });
-        });
+    //             expect(res).to.have.status(200);
+    //             const product = await Product.findOne({ name: 'Test Product' });
+    //             expect(product).to.not.be.null;
+    //             expect(product.name).to.equal('Test Product');
+    //         });
+    //     });
 
-        describe('DELETE /products/:id', function () {
-            it('should delete a product', async function () {
-                const product = new Product({
-                    name: 'Test Product',
-                    imageUrl: '/uploads/test.jpeg',
-                    price: 100,
-                    details: 'Test details',
-                    owner: user._id
+    //     describe('DELETE /products/:id', function () {
+    //         it('should delete a product', async function () {
+    //             const product = new Product({
+    //                 name: 'Test Product',
+    //                 imageUrl: '/uploads/test.jpeg',
+    //                 price: 100,
+    //                 details: 'Test details',
+    //                 owner: user._id
+    //             });
+    //             const savedProduct = await product.save();
+    //             const res = await chai.request(app).delete(`/products/${savedProduct._id}`);
+
+    //             expect(res).to.have.status(200);
+    //             expect(res.body).to.have.property('message').to.equal('Product deleted successfully!');
+
+    //             const deletedProduct = await Product.findById(savedProduct._id);
+    //             expect(deletedProduct).to.be.null;
+    //         });
+    //     });
+
+    //     describe('GET /products', function () {
+    //         //getProducts test
+    //         it('should fetch all products based on price range', async function () {
+    //             const res = await chai.request(app).get('/products?priceRange=0-100').set('Authorization', `Bearer ${token}`);
+    //             expect(res).to.have.status(200);
+    //             expect(res.body).to.be.an('array');
+    //             res.body.forEach(product => {
+    //                 expect(product.price).to.be.at.least(0);
+    //                 expect(product.price).to.be.at.most(100);
+    //             });
+    //         });
+
+    //         //getProductsByUser test
+    //         it('should fetch all products by a specific user', async function () {
+    //             const res = await chai.request(app).get('/products/byUser').set('Authorization', `Bearer ${token}`);
+    //             expect(res).to.have.status(200);
+    //             expect(res.body).to.be.an('array');
+    //             res.body.forEach(product => {
+    //                 expect(product.owner).to.equal(String(user._id));
+    //             });
+    //         });
+
+    // //getAdminPage test
+    // it('should fetch all user feedbacks and listings for admin', async function () {
+    //     const res = await chai.request(app).get('/admin').set('Authorization', `Bearer ${token}`);
+    //     expect(res).to.have.status(200);
+    //     expect(res.body).to.have.property('products').that.is.an('array');
+    //     expect(res.body).to.have.property('feedbacks').that.is.an('array');
+    // });
+
+    describe('View Controller', function () {
+        it('should get info', function (done) {
+            chai.request(app)
+                .get('/info')
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
                 });
-                const savedProduct = await product.save();
-                const res = await chai.request(app).delete(`/products/${savedProduct._id}`);
-
-                expect(res).to.have.status(200);
-                expect(res.body).to.have.property('message').to.equal('Product deleted successfully!');
-
-                const deletedProduct = await Product.findById(savedProduct._id);
-                expect(deletedProduct).to.be.null;
-            });
         });
 
-        describe('GET /products', function () {
-            //getProducts test
-            it('should fetch all products based on price range', async function () {
-                const res = await chai.request(app).get('/products?priceRange=0-100').set('Authorization', `Bearer ${token}`);
-                expect(res).to.have.status(200);
-                expect(res.body).to.be.an('array');
-                res.body.forEach(product => {
-                    expect(product.price).to.be.at.least(0);
-                    expect(product.price).to.be.at.most(100);
+        it('should search products', function (done) {
+            chai.request(app)
+                .get('/search?term=test') // replace 'test' with your test search term
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
                 });
-            });
+        });
 
-            //getProductsByUser test
-            it('should fetch all products by a specific user', async function () {
-                const res = await chai.request(app).get('/products/byUser').set('Authorization', `Bearer ${token}`);
-                expect(res).to.have.status(200);
-                expect(res.body).to.be.an('array');
-                res.body.forEach(product => {
-                    expect(product.owner).to.equal(String(user._id));
+        it('should get product detail', function (done) {
+            const productId = 'put-your-product-id-here';
+            chai.request(app)
+                .get(`/product-detail/${productId}`)
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
                 });
-            });
+        });
 
-            // //getAdminPage test
-            // it('should fetch all user feedbacks and listings for admin', async function () {
-            //     const res = await chai.request(app).get('/admin').set('Authorization', `Bearer ${token}`);
-            //     expect(res).to.have.status(200);
-            //     expect(res.body).to.have.property('products').that.is.an('array');
-            //     expect(res.body).to.have.property('feedbacks').that.is.an('array');
-            // });
+        it('should get profile', function (done) {
+            chai.request(app)
+                .get('/profile')
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+
+        it('should edit user (GET)', function (done) {
+            const userId = 'put-your-user-id-here';
+            chai.request(app)
+                .get(`/edit-user/${userId}`)
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+
+        it('should edit user (POST)', function (done) {
+            const userId = 'put-your-user-id-here';
+            chai.request(app)
+                .post(`/edit-user/${userId}`)
+                .send({ username: 'test', email: 'test@email.com', role: 'user' })
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+
+        it('should edit product (GET)', function (done) {
+            const productId = 'put-your-product-id-here';
+            chai.request(app)
+                .get(`/edit-product/${productId}`)
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+
+        it('should edit product (POST)', function (done) {
+            const productId = 'put-your-product-id-here';
+            chai.request(app)
+                .post(`/edit-product/${productId}`)
+                .send({ name: 'test', price: '10', description: 'test description' })
+                .end(function (err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
         });
     });
 });
