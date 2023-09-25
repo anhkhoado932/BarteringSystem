@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Notification = require('../models/notification');
-
-router.get('/latest', async (req, res) => {
+const noticationController= require('../controller/notificationController')
+router.get('/latest', noticationController.getLatestNotification );
+async (req, res) => {
     // console.log("Session data:", req.session);
     try {
         if (req.session.hasDisplayedNotification) {
@@ -26,6 +27,6 @@ router.get('/latest', async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: "Internal Server Error" });
     }
-});
+};
 
 module.exports = router;
