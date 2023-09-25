@@ -235,7 +235,7 @@ describe('Testing', function () {
         });
 
         it('should get product detail', function (done) {
-            const productId = 'put-your-product-id-here';
+            const productId = ''; //khoa please put a product ID here
             chai.request(app)
                 .get(`/product-detail/${productId}`)
                 .end(function (err, res) {
@@ -254,7 +254,7 @@ describe('Testing', function () {
         });
 
         it('should edit user (GET)', function (done) {
-            const userId = 'put-your-user-id-here';
+            const userId = ''; //khoa please put a user ID here
             chai.request(app)
                 .get(`/edit-user/${userId}`)
                 .end(function (err, res) {
@@ -264,7 +264,7 @@ describe('Testing', function () {
         });
 
         it('should edit user (POST)', function (done) {
-            const userId = 'put-your-user-id-here';
+            const userId = ''; //khoa please put a user ID here
             chai.request(app)
                 .post(`/edit-user/${userId}`)
                 .send({ username: 'test', email: 'test@email.com', role: 'user' })
@@ -275,7 +275,7 @@ describe('Testing', function () {
         });
 
         it('should edit product (GET)', function (done) {
-            const productId = 'put-your-product-id-here';
+            const productId = ''; //khoa please put a product ID here
             chai.request(app)
                 .get(`/edit-product/${productId}`)
                 .end(function (err, res) {
@@ -285,7 +285,7 @@ describe('Testing', function () {
         });
 
         it('should edit product (POST)', function (done) {
-            const productId = 'put-your-product-id-here';
+            const productId = ''; //khoa please put a product ID here
             chai.request(app)
                 .post(`/edit-product/${productId}`)
                 .send({ name: 'test', price: '10', description: 'test description' })
