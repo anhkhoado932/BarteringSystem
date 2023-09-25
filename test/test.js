@@ -14,85 +14,76 @@ const fs = require('fs');
 chai.use(chaiHttp);
 
 describe('Testing', function () {
-    this.timeout(50000);
+    this.timeout(50000); // await DB connection
+    let agent;
     before(async function () {
-        this.timeout(10000); //give time for db connection
-        console.log("Before hook started");
-        try {
-            console.log("Trying to connect to DB");
-            await connectDB();
-            console.log("DB Connected");
-        } catch (err) {
-            console.error('Setup failed:', err);
-            throw err;
-        }
-
-        chai.request(app).post('/login').send({
-            email: "test@gmail.com",
-            password: "123456"
-        })
-        console.log("Before hook finished");
+        agent = chai.request.agent(app);
+        await agent.post('/login').send({
+            email: 'admin@gmail.com',
+            password: '123456',
+        });
     });
 
     after(async function () {
-        await mongoose.connection.close();
+        await agent.close();
     });
 
     describe('User Controller', function () {
-        // register test
-        describe('POST /user/register', function () {
-            it('should register a user', function (done) {
-                chai.request(app)
-                    .post('/register?testing=true')
-                    .send({
-                        email: `test${Date.now()}@test.com`,
-                        name: 'Test',
-                        password: 'password',
-                        testing: 'true'
-                    })
-                    .end((err, res) => {
-                        if (err) console.error("Error:", err.response.body);
-                        expect(err).to.be.null;
-                        expect(res).to.have.status(200);
-                        expect(res.body.message).to.equal('Registration successful.');
-                        done();
-                    });
-            });
+        it('Register user', function (done) {
+            agent
+                .post('/register?testing=true')
+                .send({
+                    email: `test${Date.now()}@test.com`,
+                    name: 'Test',
+                    password: 'password',
+                    testing: 'true',
+                })
+                .end((err, res) => {
+                    if (err) console.error('Error:', err.response.body);
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.body.message).to.equal(
+                        'Registration successful.'
+                    );
+                    done();
+                });
         });
 
-        // login test
-        describe('POST /user/login', function () {
-            it('should login a user', async function () {
-                const salt = await bcrypt.genSalt(10);
-                const hashedPassword = await bcrypt.hash('password', salt);
-                const email = `loginTest${Date.now()}@test.com`;
-                const newUser = new User({ email: email, name: 'Test', password: hashedPassword });
-                await newUser.save();
-
-                const res = await chai.request(app)
-                    .post('/login?testing=true')
-                    .send({
-                        email: newUser.email,
-                        password: 'password',
-                        testing: 'true'
-                    });
-                expect(res).to.have.status(200);
-                expect(res.body).to.have.property('message').to.equal('Login successful.');
+        it('Delete user', async function () {
+            const uniqueEmail = `${Date.now()}@test.com`;
+            const newUser = new User({
+                email: uniqueEmail,
+                name: 'Test',
+                password: 'password',
             });
+            const savedUser = await newUser.save();
+            const res = await agent.delete(`/user/${savedUser._id.toString()}`);
+            expect(res).to.have.status(200);
+            expect(res.body)
+                .to.have.property('message')
+                .to.equal('User deleted.');
         });
 
-        // delete test
-        describe('DELETE /user/:id', function () {
-            it('should delete a user', async function () {
-                const uniqueEmail = `${Date.now()}@test.com`;
-                const newUser = new User({ email: uniqueEmail, name: 'Test', password: 'password' });
-                const savedUser = await newUser.save();
-                const res = await chai.request(app).delete(`/user/${savedUser._id}`);
-                console.log(res.body);
-
-                expect(res).to.have.status(200);
-                expect(res.body).to.have.property('message').to.equal('User deleted.');
+        it('Login user', async function () {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash('password', salt);
+            const email = `loginTest${Date.now()}@test.com`;
+            const newUser = new User({
+                email: email,
+                name: 'Test',
+                password: hashedPassword,
             });
+            await newUser.save();
+
+            const res = await agent.post('/login?testing=true').send({
+                email: newUser.email,
+                password: 'password',
+                testing: 'true',
+            });
+            expect(res).to.have.status(200);
+            expect(res.body)
+                .to.have.property('message')
+                .to.equal('Login successful.');
         });
     });
 
@@ -100,7 +91,7 @@ describe('Testing', function () {
         // Post feedback test
         describe('POST /feedback', function () {
             it('should post a feedback', function (done) {
-                chai.request(app)
+                agent
                     .post('/feedbacks')
                     .send({
                         email: 'testemail@test.com',
@@ -127,7 +118,7 @@ describe('Testing', function () {
                 });
                 const savedFeedback = await newFeedback.save();
 
-                const res = await chai.request(app).delete(`/feedback/${savedFeedback._id}`);
+                const res = agent.delete(`/feedback/${savedFeedback._id}`);
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('message').to.equal('Feedback deleted successfully.');
             });
@@ -153,7 +144,7 @@ describe('Testing', function () {
         });
 
         beforeEach(async function () {
-            const res = await chai.request(app)
+            const res = agent
                 .post('/users/login')
                 .send({ email: 'test@test.com', password: 'password' });
 
@@ -165,7 +156,7 @@ describe('Testing', function () {
 
         describe('POST /products/uploadProduct', function () {
             it('should upload a product', async function () {
-                const res = await chai.request(app)
+                const res = agent
                     .post('/products/uploadProduct')
                     .set('Authorization', `Bearer ${token}`)
                     .field('productName', 'Test Product')
@@ -190,7 +181,7 @@ describe('Testing', function () {
                     owner: user._id
                 });
                 const savedProduct = await product.save();
-                const res = await chai.request(app).delete(`/products/${savedProduct._id}`);
+                const res = agent.delete(`/products/${savedProduct._id}`);
 
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('message').to.equal('Product deleted successfully!');
@@ -203,7 +194,7 @@ describe('Testing', function () {
         describe('GET /products', function () {
             //getProducts test
             it('should fetch all products based on price range', async function () {
-                const res = await chai.request(app).get('/products?priceRange=0-100').set('Authorization', `Bearer ${token}`);
+                const res = agent.get('/products?priceRange=0-100').set('Authorization', `Bearer ${token}`);
                 expect(res).to.have.status(200);
                 expect(res.body).to.be.an('array');
                 res.body.forEach(product => {
@@ -214,7 +205,7 @@ describe('Testing', function () {
 
             //getProductsByUser test
             it('should fetch all products by a specific user', async function () {
-                const res = await chai.request(app).get('/products/byUser').set('Authorization', `Bearer ${token}`);
+                const res = agent.get('/products/byUser').set('Authorization', `Bearer ${token}`);
                 expect(res).to.have.status(200);
                 expect(res.body).to.be.an('array');
                 res.body.forEach(product => {
@@ -224,7 +215,7 @@ describe('Testing', function () {
 
             //getAdminPage test
             it('should fetch all user feedbacks and listings for admin', async function () {
-                const res = await chai.request(app).get('/admin').set('Authorization', `Bearer ${token}`);
+                const res = agent.get('/admin').set('Authorization', `Bearer ${token}`);
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property('products').that.is.an('array');
                 expect(res.body).to.have.property('feedbacks').that.is.an('array');
