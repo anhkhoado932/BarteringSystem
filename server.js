@@ -16,7 +16,6 @@ const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const authMiddleware = require('./middlewares/auth')
-connectDB();
 
 //Session Configuration
 const sessionMiddleware = session({
@@ -49,7 +48,8 @@ app.use('/', viewRoutes);
 
 app.set('view engine', 'ejs');
 
-http.listen(process.env.PORT, () => {
+http.listen(process.env.PORT, async () => {
+    await connectDB();
     console.log(`Server is running on port ${process.env.PORT}`);
 });
 
