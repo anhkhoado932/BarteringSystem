@@ -8,25 +8,29 @@ exports.registerUser = async (req, res) => {
         const { email, name, password } = req.body;
 
         // check email, name and password are exsited or not
+        //if email, name or password was missing, it will appears 400 error (400 Bad Request is a standardized way to communicate to the client).
         if (!email || !name || !password) {
             return res.status(400).send('Missing email, name or password.');
         }
 
-        // check password
+        // check password, check if password is a string
         if (typeof password !== 'string') {
             return res.status(400).send('Invalid password provided.');
         }
 
-        // check email
+        // check email---query a database( MongoDB )
+        //giving a descriptive name to a variable like 'existingUser'
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).send('Email already exists');
         }
 
         // hashing the password
+        // 'random "salt" value using the 'bcrypt'-protect password security 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        //defind when someone register, which is defind as user role; and including email, name and password 
         const user = new User({
             email,
             name,
@@ -45,7 +49,7 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
-        // find the user
+        // find the user in the database with provided email;
         const user = await User.findOne({ email: req.body.email });
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
@@ -72,8 +76,8 @@ exports.loginUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({ messgae: 'User deleted' });
+        await User.findByIdAndDelete(req.params.id); //find a user by their ID and delete them from database
+        res.status(200).json({ messgae: 'User deleted' });//successful-200
     } catch (error) {
         res.status(500).json({ message: 'Internet server error' });
     }
