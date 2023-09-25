@@ -2,14 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const app = require('../server');
-const connectDB = require('../dbConnection');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const Feedback = require('../models/feedback');
-const Product = require('../models/product');
-const User = require('../models/user');
-const path = require('path');
-const fs = require('fs');
 
 chai.use(chaiHttp);
 

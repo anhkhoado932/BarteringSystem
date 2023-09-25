@@ -2,14 +2,8 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const app = require('../server');
-const connectDB = require('../dbConnection');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const Feedback = require('../models/feedback');
 const Product = require('../models/product');
 const User = require('../models/user');
-const path = require('path');
-const fs = require('fs');
 
 chai.use(chaiHttp);
 
@@ -27,86 +21,66 @@ describe('Testing', function () {
     after(async function () {
         await agent.close();
     });
-    
+
     describe('View Controller', function () {
-        it('should get info', function (done) {
-            chai.request(app)
-                .get('/info')
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get info page', function (done) {
+            agent.get('/info').end(function (err, res) {
+                expect(res.status).to.equal(200);
+                done();
+            });
         });
 
-        it('should search products', function (done) {
-            chai.request(app)
-                .get('/search?term=test')
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get product by search', function (done) {
+            agent.get('/search?term=test').end(function (err, res) {
+                expect(res.status).to.equal(200);
+                done();
+            });
         });
 
-        it('should get product detail', function (done) {
-            const productId = ''; //khoa please put a product ID here
-            chai.request(app)
-                .get(`/product-detail/${productId}`)
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get product detail page', async function () {
+            const product = await Product.findOne();
+            const res = await agent.get(`/product-detail/${product._id}`);
+            expect(res.status).to.equal(200);
         });
 
-        it('should get profile', function (done) {
-            chai.request(app)
-                .get('/profile')
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get profile page', function (done) {
+            agent.get('/profile').end(function (err, res) {
+                expect(res.status).to.equal(200);
+                done();
+            });
         });
 
-        it('should edit user (GET)', function (done) {
-            const userId = ''; //khoa please put a user ID here
-            chai.request(app)
-                .get(`/edit-user/${userId}`)
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get edit user page', async function () {
+            const user = await User.findOne();
+            const res = await agent.get(`/edit-user/${user._id}`);
+            expect(res.status).to.equal(200);
         });
 
-        it('should edit user (POST)', function (done) {
-            const userId = ''; //khoa please put a user ID here
-            chai.request(app)
-                .post(`/edit-user/${userId}`)
-                .send({ username: 'test', email: 'test@email.com', role: 'user' })
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Edit a user', async function () {
+            const user = await User.findOne();
+            const res = await agent.post(`/edit-user/${user._id}`).send({
+                username: 'test',
+                email: 'test@email.com',
+                role: 'user',
+            });
+            expect(res.status).to.equal(200);
         });
 
-        it('should edit product (GET)', function (done) {
-            const productId = ''; //khoa please put a product ID here
-            chai.request(app)
-                .get(`/edit-product/${productId}`)
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
+        it('Get edit product page', async function () {
+            const product = await Product.findOne();
+            const res = await agent.get(`/edit-product/${product._id}`);
+            expect(res.status).to.equal(200);
         });
 
-        it('should edit product (POST)', function (done) {
-            const productId = ''; //khoa please put a product ID here
-            chai.request(app)
-                .post(`/edit-product/${productId}`)
-                .send({ name: 'test', price: '10', description: 'test description' })
-                .end(function (err, res) {
-                    expect(res.status).to.equal(200);
-                    done();
-                });
-            }
-        )
-    })  
+        it('Edit a product', async function () {
+            const product = await Product.findOne();
+            const res = await agent.post(`/edit-product/${product._id}`).send({
+                name: 'test',
+                price: '10',
+                description: 'test description',
+            });
+
+            expect(res.status).to.equal(200);
+        });
+    });
 });
