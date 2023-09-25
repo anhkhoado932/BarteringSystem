@@ -227,7 +227,7 @@ describe('Testing', function () {
 
         it('should search products', function (done) {
             chai.request(app)
-                .get('/search?term=test') // replace 'test' with your test search term
+                .get('/search?term=test')
                 .end(function (err, res) {
                     expect(res.status).to.equal(200);
                     done();
