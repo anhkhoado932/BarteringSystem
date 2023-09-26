@@ -1,9 +1,13 @@
 $(document).ready(function () {
-    const navlinks = $('.nav-link');
     const path = window.location.pathname;
+    const navlinks = $('.nav-link');
     
+    // Update current active navlink
     navlinks.each(function () {
-        if (path.startsWith($(this).attr('href'))){
+        if (path == '/' && $(this).attr('href') == '/home') {
+            $(this).addClass('active');
+        }
+        else if (path.startsWith($(this).attr('href'))){
             $(this).addClass('active');
         }
         else {
@@ -25,13 +29,13 @@ $(document).ready(function() {
             url = url.concat(`?redirect=${redirect}`);
         }
 
+        // send POST login request
         $.ajax({
             data: $(this).serialize(),
             type: "POST",
             url: url,
             success: function(data) {
-                const repath = data.redirect;
-                window.location.href = repath;
+                window.location.href = data.redirect;
             },
             error: function (data) {
                 const message = data.responseJSON['message'];

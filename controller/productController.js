@@ -1,20 +1,6 @@
-const multer = require('multer');
-const path = require('path');
 const Product = require('../models/product');
 const User = require('../models/user');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../public', 'uploads'));
-    },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
-    }
-});
-
-const upload = multer({ storage: storage });
-
-exports.uploadProductMiddleware = upload.single('productImage');
 
 exports.uploadProduct = async (req, res) => {
     try {
