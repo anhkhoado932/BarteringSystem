@@ -1,7 +1,10 @@
+/**
+ * Middleware for authentication 
+ */
 function authenticate(req, res, next) {
-    const current_path = req.path;
-    if (!req.session.user && current_path != "/login") {
-        return res.redirect(`/login?redirect=${current_path}`)
+    // if user is unauthenticated, redirect to login page 
+    if (!req.session.user && req.path != "/login") {
+        return res.redirect(`/login?redirect=${req.path}`)
     }
     next();
 }

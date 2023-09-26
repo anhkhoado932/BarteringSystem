@@ -1,3 +1,6 @@
+/**
+ * Middleware for session management with express-session 
+ */
 require('dotenv').config();
 const session = require("express-session");
 
