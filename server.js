@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const session = require("express-session");
 const app = express();
 const bodyParser = require('body-parser');
 const connectDB = require('./dbConnection');
@@ -16,13 +15,9 @@ const Message = require('./models/message');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const authMiddleware = require('./middlewares/auth')
+const sessionMiddleware = require('./middlewares/session')
 
 //Session Configuration
-const sessionMiddleware = session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: true,
-});
 app.use(sessionMiddleware);
 io.engine.use(sessionMiddleware);
 
