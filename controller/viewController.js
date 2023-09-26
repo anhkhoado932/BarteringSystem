@@ -74,7 +74,7 @@ exports.editUserGet = async (req, res) => {
 exports.editUserPost = async (req, res) => {
     const { id } = req.params;
     const { username, email, role } = req.body;
-    await User.findByIdAndUpdate(id, { username, email, role });
+    await User.findByIdAndUpdate(id, { name: username, email, role });
     res.redirect('/profile');
 };
 
