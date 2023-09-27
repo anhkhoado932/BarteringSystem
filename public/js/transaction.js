@@ -167,4 +167,35 @@ $(document).ready(function () {
         $('#confirmFinish').modal('hide');
         $('#confirmCancel').modal('hide');
     }
+
+    $("#submitReview").on('click', function (e) {
+        e.preventDefault();
+
+        const transactionId = getTransactionIdFromUrl();
+        const isUser1 = $("#isUser1").attr('data') == 'true';
+        const reviewData = {}
+        console.log(isUser1)
+        console.log(typeof isUser1)
+        if (isUser1) {
+            reviewData['review1'] = $("#review").val();
+            reviewData['rating1'] = $("#rating").val();
+        } else {
+            reviewData['review2'] = $("#review").val();
+            reviewData['rating2'] = $("#rating").val();
+        }
+        console.log(reviewData)
+        $.ajax({
+            type: "PUT",
+            url: `/transaction/${transactionId}`, 
+            data: reviewData,
+            success: function (data) {
+                console.log("Review submitted successfully:", data);
+                $('#reviewModal').modal('hide');
+            },
+            error: function (error) {
+                console.error("Error submitting review:", error);
+            }
+        });
+    });
+
 });
