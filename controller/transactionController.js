@@ -14,8 +14,8 @@ exports.getTransaction = (req, res) => {
         })
         .populate("user1", "name email")
         .populate("user2", "name email")
-        .populate("products1", "name imageUrl price")
-        .populate("products2", "name imageUrl price")
+        .populate("product1", "name imageUrl price")
+        .populate("product2", "name imageUrl price")
         .lean()
         .then((transactions) => {
             transactions.sort(compareTransactionByStatus);
@@ -42,13 +42,13 @@ exports.getTransaction = (req, res) => {
 exports.insertTransaction = async (req, res) => {
     const productId1 = new ObjectId(req.body["productId1"]);
     const productId2 = new ObjectId(req.body["productId2"]);
-    const products1 = await productModel.findById(productId1);
-    const products2 = await productModel.findById(productId2);
+    const product1 = await productModel.findById(productId1);
+    const product2 = await productModel.findById(productId2);
     const newTransaction = new transactionModel({
-        user1: products1.owner,
-        user2: products2.owner,
-        products1: [productId1],
-        products2: [productId2],
+        product1,
+        product2,
+        user1: product1.owner,
+        user2: product2.owner,
         status: "active",
     });
     newTransaction
@@ -93,63 +93,54 @@ exports.deleteTransaction = (req, res) => {
 exports.finishTransaction = async (req, res) => {
     const { _id } = req.session.user;
     const { transactionId } = req.body;
-    const currentTransaction = await transactionModel.findById(transactionId);
-    const isUser1 = currentTransaction.user1._id == _id;
-    if (currentTransaction.status.startsWith("pending")) {
-        currentTransaction.status = "finished";
-    }
-    else if (currentTransaction.status == "active") {
-        currentTransaction.status = isUser1 ? "pending_user2" : "pending_user1";
-    }
-    currentTransaction
-        .save()
-        .then((t) => {
-            res.send({ redirect: "/transaction" });
 
-            // cancel all transaction involving these product
-            if (t.status == "finished") {
-                const transactedProductIds = [
-                    ...currentTransaction.products1,
-                    ...currentTransaction.products2
-                ];
-                transactionModel.updateMany({
-                    $or: [
-                        {
-                            products1: {
-                                $in: transactedProductIds
-                            }
-                        },
-                        {
-                            products2: {
-                                $in: transactedProductIds
-                            }
-                        }
-                    ],
-                    _id: { $ne: currentTransaction._id }
-                }, {
-                    status: "interrupted"
-                }).then((t) => {
-                    console.log(t);
-                });
-            }
-        })
-        .catch((err) => {
-            res.status(400).send({ message: err });
-        });
+    try {
+        const currentTransaction = await transactionModel.findById(transactionId);
+        const isUser1 = currentTransaction.user1._id == _id;
+
+        if (currentTransaction.status.startsWith("pending")) {
+            currentTransaction.status = "finished";
+        } else if (currentTransaction.status == "active") {
+            currentTransaction.status = isUser1 ? "pending_user2" : "pending_user1";
+        }
+        await currentTransaction.save();
+        res.json({ redirect: "/transaction" });
+
+        // Cancel all transactions involving the same products if this transaction is finished
+        if (currentTransaction.status == "finished") {
+            const transactedProductIds = [currentTransaction.product1,currentTransaction.product2
+            ];
+
+            // Update other transactions involving the same products to "interrupted"
+            await transactionModel.updateMany({
+                $or: [
+                    { product1: { $in: transactedProductIds } },
+                    { product2: { $in: transactedProductIds } }
+                ],
+                _id: { $ne: currentTransaction._id }
+            }, {
+                status: "interrupted"
+            });
+        }
+    } catch (err) {
+        // Handle errors and send an error response with a status code
+        res.status(500).json({ error: "Failed to finish the transaction", message: err.message });
+    }
 };
 
-exports.cancelTransaction = (req, res) => {
-    const { transactionId } = req.body;
-    transactionModel
-        .findByIdAndUpdate(transactionId, {
+
+exports.cancelTransaction = async (req, res) => {
+    try {
+        const { transactionId } = req.body;
+
+        await transactionModel.findByIdAndUpdate(transactionId, {
             status: "interrupted",
-        })
-        .then(() => {
-            res.send({ redirect: "/transaction" });
-        })
-        .catch((err) => {
-            res.status(400).send({ message: err });
         });
+
+        res.json({ redirect: "/transaction" });
+    } catch (err) {
+        res.status(400).json({ error: "Failed to cancel the transaction", message: err.message });
+    }
 };
 
 function compareTransactionByStatus(transaction1, transaction2) {
