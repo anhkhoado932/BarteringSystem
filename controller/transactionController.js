@@ -106,7 +106,8 @@ exports.finishTransaction = async (req, res) => {
                 : 'pending_user1';
         }
         await currentTransaction.save();
-        res.json({ redirect: '/transaction' });
+
+        res.status(200).send({"message": "transaction status is updated"});
 
         // Cancel all transactions involving the same products if this transaction is finished
         if (currentTransaction.status == 'finished') {
@@ -146,7 +147,7 @@ exports.cancelTransaction = async (req, res) => {
             status: 'interrupted',
         });
 
-        res.json({ redirect: '/transaction' });
+        res.status(200).send({"message": "transaction status is updated"});
     } catch (err) {
         res.status(400).json({
             error: 'Failed to cancel the transaction',

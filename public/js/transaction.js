@@ -153,15 +153,26 @@ $(document).ready(function () {
         sendTransactionRequest('/transaction/cancel', transactionId);
     });
 
+    $('.transaction-confirm-delete-btn').on('click', function () {
+        const transactionId = getTransactionIdFromUrl();
+        
+        $.ajax({
+            url: `/transaction/${transactionId}`,
+            type: "DELETE", 
+            success: (data) => {
+                window.location.reload();
+            },
+        })
+        $('#confirmDelete').modal('hide');
+    });
+
     function sendTransactionRequest(url, transactionId) {
         $.ajax({
             url: url,
             type: 'POST',
             data: { transactionId },
             success: (data) => {
-                if (typeof data.redirect === 'string') {
-                    window.location = data.redirect;
-                }
+                window.location.reload();
             },
         });
         $('#confirmFinish').modal('hide');
