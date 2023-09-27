@@ -87,7 +87,7 @@
                             <div class="row">
                                 <div class="col transaction-details-baterer">
                                     <b>
-                                        Barterer:
+                                        Other user information:
                                     </b>
                                     <div class="d-flex mt-1">
                                         <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
@@ -125,7 +125,36 @@
                                         </button>                            
 
                                     <% } %> 
-                                <% } %>       
+                                <% } else if (selectedTransaction.status === "finished") { %>      
+                                    <% if (selectedTransaction.isUser1) { %>
+                                        <% var otherRating = selectedTransaction.rating2 %>
+                                        <% var otherReview = selectedTransaction.review2%>
+                                    <% } else { %>
+                                        <% var otherRating = selectedTransaction.rating1%>
+                                        <% var otherReview = selectedTransaction.review1%>
+                                    <% } %>
+                                    
+                                    <b>
+                                        Rating:
+                                    </b>
+                                    <% for (i = 0; i < 5; i++) { %>
+                                        <% if (i < (otherRating - 0.5)) { %>
+                                            <i class="bi bi-star-fill" style="color: rgb(255, 200, 0)"></i>
+                                        <% } else { %>
+                                            <i class="bi bi-star-fill"></i>
+                                        <% } %>
+                                    <% } %>
+                                    <br>
+                                    <br>
+                                    <b>
+                                        Review: 
+                                    </b>
+                                    <% if (otherReview) {%>
+                                        <p><% otherReview %></p>
+                                    <% } else { %> 
+                                        <i>No reviews yet</i>
+                                    <% } %>
+                                <% } %> 
                             </div>
                         </div>
                     </div>
