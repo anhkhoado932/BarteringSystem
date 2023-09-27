@@ -31,7 +31,7 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <% if (transaction.user1.name == user.name) { %>
-                                    <b><%= transaction.user2.name %></b>
+                                    <b><%= transaction.user2?.name %></b>
                                 <% } else  { %>
                                     <b><%= transaction.user1.name %></b>
                                 <% } %>
@@ -70,15 +70,15 @@
                             <b>Product:</b>
                             <div class="row">
                                 <div class="col d-flex justify-content-center align-items-center flex-column">
-                                    <img class="trade-item1" src="<%= selectedTransaction.products1[0].imageUrl %>" alt="<%= selectedTransaction.products1[0].name %>">
-                                    <div>$<%= selectedTransaction.products1[0].price %></div>
+                                    <img class="trade-item1" src="<%= selectedTransaction.product1.imageUrl %>" alt="<%= selectedTransaction.product1.name %>">
+                                    <div>$<%= selectedTransaction.product1.price %></div>
                                 </div>
                                 <div class="col trade-icon d-flex justify-content-center align-items-center">
                                     <i class="bi bi-arrow-left-right" style="font-size: 50px"></i>
                                 </div>
                                 <div class="col d-flex justify-content-center align-items-center flex-column">
-                                    <img class="trade-item2" src="<%= selectedTransaction.products2[0].imageUrl %>" alt="<%= selectedTransaction.products2[0].name %>">
-                                    <div>$<%= selectedTransaction.products2[0].price %></div>
+                                    <img class="trade-item2" src="<%= selectedTransaction.product2.imageUrl %>" alt="<%= selectedTransaction.product2.name %>">
+                                    <div>$<%= selectedTransaction.product2.price %></div>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             <div class="row">
                                 <div class="col transaction-details-baterer">
                                     <b>
-                                        Barterer:
+                                        Other user information:
                                     </b>
                                     <div class="d-flex mt-1">
                                         <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
@@ -125,7 +125,46 @@
                                         </button>                            
 
                                     <% } %> 
-                                <% } %>       
+                                <% } else if (selectedTransaction.status === "finished") { %>      
+                                    <% if (selectedTransaction.isUser1) { %>
+                                        <% var ourRating = selectedTransaction.rating1 %>
+                                        <% var ourReview = selectedTransaction.review1 %>
+                                        <% var otherRating = selectedTransaction.rating2 %>
+                                        <% var otherReview = selectedTransaction.review2 %>
+                                    <% } else { %>
+                                        <% var ourRating = selectedTransaction.rating2 %>
+                                        <% var ourReview = selectedTransaction.review2 %>
+                                        <% var otherRating = selectedTransaction.rating1%>
+                                        <% var otherReview = selectedTransaction.review1%>
+                                    <% } %>
+                                    
+                                    <b>
+                                        Rating:
+                                    </b>
+                                    <% for (i = 0; i < 5; i++) { %>
+                                        <% if (i < (otherRating - 0.5)) { %>
+                                            <i class="bi bi-star-fill" style="color: rgb(255, 200, 0)"></i>
+                                        <% } else { %>
+                                            <i class="bi bi-star-fill"></i>
+                                        <% } %>
+                                    <% } %>
+                                    <br>
+                                    <br>
+                                    <b>
+                                        Review: 
+                                    </b>
+                                    <% if (otherReview) {%>
+                                        <p><%= otherReview %></p>
+                                    <% } else { %> 
+                                        <i>No reviews yet</i>
+                                    <% } %>
+                                    <br>
+                                    <button 
+                                        class="btn btn-success"
+                                        data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                        Leave a review
+                                    </button>
+                                <% } %> 
                             </div>
                         </div>
                     </div>
@@ -169,6 +208,43 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, go back</button>
                         <button type="button" class="btn btn-primary transaction-confirm-cancel-btn">Yes, cancel transaction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reviewModal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Leave a Review</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="review-form">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select class="form-select" id="rating">
+                                    <option value="5" <% if (ourRating == 5) { %>selected<% } %>>5 Stars</option>
+                                    <option value="4" <% if (ourRating == 4) { %>selected<% } %>>4 Stars</option>
+                                    <option value="3" <% if (ourRating == 3) { %>selected<% } %>>3 Stars</option>
+                                    <option value="2" <% if (ourRating == 2) { %>selected<% } %>>2 Stars</option>
+                                    <option value="1" <% if (ourRating == 1) { %>selected<% } %>>1 Star</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="review" class="form-label">Your Review</label>
+                                <textarea class="form-control" id="review" rows="4" placeholder="Write your review here"><% if (ourReview) { %><%= ourReview%><% } %></textarea>
+                            </div>
+                            <div 
+                            id="isUser1" 
+                            data= <%=selectedTransaction?.isUser1%>
+                            ></div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="submitReview">Submit Review</button>
                     </div>
                 </div>
             </div>

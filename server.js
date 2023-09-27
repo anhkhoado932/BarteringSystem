@@ -61,9 +61,7 @@ io.on("connection", (socket) => {
             const newMessage = new Message({
                 transactionId: room,
                 userId: user._id,
-                messageType: "text",
                 content: data,
-                parentId: null,
             });
             newMessage.save().then((message) => {
                 socket.to(room).emit("new-message", { message });
