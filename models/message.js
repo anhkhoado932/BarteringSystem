@@ -10,21 +10,8 @@ const messageSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user',
         },
-        messageType: {
-            type: String,
-            default: 'text',
-            enum: ['text', 'image', 'emoji'],
-        },
         content: {
             type: String,
-        },
-        parentId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'message',
-        },
-        isRead: {
-            type: Boolean,
-            default: false,
         },
     },
     { timestamps: true }
