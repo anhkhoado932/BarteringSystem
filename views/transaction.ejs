@@ -106,25 +106,10 @@
                                 </div>    
                             </div>
                             <div class="col">                    
-                                <% if (selectedTransaction.status !== "finished" && selectedTransaction.status !== "interrupted")  { %> 
-                                    <b style="display: block">Action:</b>
-                                    <% if ((selectedTransaction.status == 'pending_user1' && !selectedTransaction.isUser1) || 
-                                        (selectedTransaction.status == 'pending_user2' && selectedTransaction.isUser1)
-                                        ) { %>
-                                        Waiting for the other user
-                                    <% } else { %>
-                                        <button 
-                                            class="btn btn-success transaction-finish-btn"
-                                            data-bs-toggle="modal" data-bs-target="#confirmFinish">
-                                            Finish
-                                        </button>
-                                        <button 
-                                            class="btn btn-danger transaction-cancel-btn"
-                                            data-bs-toggle="modal" data-bs-target="#confirmCancel">
-                                            Cancel
-                                        </button>                            
-
-                                    <% } %> 
+                                <% if ((selectedTransaction.status == 'pending_user1' && !selectedTransaction.isUser1) || 
+                                    (selectedTransaction.status == 'pending_user2' && selectedTransaction.isUser1)
+                                    ) { %>
+                                    Waiting for the other user
                                 <% } else if (selectedTransaction.status === "finished") { %>      
                                     <% if (selectedTransaction.isUser1) { %>
                                         <% var ourRating = selectedTransaction.rating1 %>
@@ -164,7 +149,27 @@
                                         data-bs-toggle="modal" data-bs-target="#reviewModal">
                                         Leave a review
                                     </button>
-                                <% } %> 
+                                <% } else if (selectedTransaction.status == 'interrupted'){ %> 
+                                    <b style="display: block">Action:</b>
+                                    <br>
+                                    <button 
+                                        class="btn btn-danger"
+                                        data-bs-toggle="modal" data-bs-target="#confirmDelete">
+                                        Delete
+                                    </button>
+                                <% } else { %>
+                                    <b style="display: block">Action:</b>
+                                    <button 
+                                        class="btn btn-success transaction-finish-btn"
+                                        data-bs-toggle="modal" data-bs-target="#confirmFinish">
+                                        Finish
+                                    </button>
+                                    <button 
+                                        class="btn btn-danger transaction-cancel-btn"
+                                        data-bs-toggle="modal" data-bs-target="#confirmCancel">
+                                        Cancel
+                                    </button>                            
+                                <% }  %> 
                             </div>
                         </div>
                     </div>
@@ -173,6 +178,24 @@
                             Select a transaction to view details!
                         </div>
                     <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div id="confirmDelete" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Interrupted Transaction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This action cannot be undone. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, go back</button>
+                        <button type="button" class="btn btn-danger transaction-confirm-delete-btn">Yes, delete transaction</button>
+                    </div>
                 </div>
             </div>
         </div>
