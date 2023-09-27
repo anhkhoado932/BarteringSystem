@@ -127,9 +127,13 @@
                                     <% } %> 
                                 <% } else if (selectedTransaction.status === "finished") { %>      
                                     <% if (selectedTransaction.isUser1) { %>
+                                        <% var ourRating = selectedTransaction.rating1 %>
+                                        <% var ourReview = selectedTransaction.review1 %>
                                         <% var otherRating = selectedTransaction.rating2 %>
                                         <% var otherReview = selectedTransaction.review2 %>
                                     <% } else { %>
+                                        <% var ourRating = selectedTransaction.rating2 %>
+                                        <% var ourReview = selectedTransaction.review2 %>
                                         <% var otherRating = selectedTransaction.rating1%>
                                         <% var otherReview = selectedTransaction.review1%>
                                     <% } %>
@@ -221,17 +225,16 @@
                             <div class="mb-3">
                                 <label for="rating" class="form-label">Rating</label>
                                 <select class="form-select" id="rating">
-                                    <option value="5">5 Stars</option>
-                                    <option value="4">4 Stars</option>
-                                    <option value="3">3 Stars</option>
-                                    <option value="2">2 Stars</option>
-                                    <option value="1">1 Star</option>
+                                    <option value="5" <% if (ourRating == 5) { %>selected<% } %>>5 Stars</option>
+                                    <option value="4" <% if (ourRating == 4) { %>selected<% } %>>4 Stars</option>
+                                    <option value="3" <% if (ourRating == 3) { %>selected<% } %>>3 Stars</option>
+                                    <option value="2" <% if (ourRating == 2) { %>selected<% } %>>2 Stars</option>
+                                    <option value="1" <% if (ourRating == 1) { %>selected<% } %>>1 Star</option>
                                 </select>
                             </div>
-                            <%selectedTransaction?.isUser1%>
                             <div class="mb-3">
                                 <label for="review" class="form-label">Your Review</label>
-                                <textarea class="form-control" id="review" rows="4" placeholder="Write your review here"></textarea>
+                                <textarea class="form-control" id="review" rows="4" placeholder="Write your review here"><% if (ourReview) { %><%= ourReview%><% } %></textarea>
                             </div>
                             <div 
                             id="isUser1" 
