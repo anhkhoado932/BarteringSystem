@@ -7,7 +7,7 @@
             <%- include("partials/navbar") %>
         </div>
         
-        <div class="container transaction-container mt-5">
+        <div class="container transaction-container mt-5 mb-5">
             <div class="row header">
                 <div class="col-2"><b>Transaction</b></div>
                 <div class="col"><b>Details</b></div>
@@ -27,6 +27,7 @@
                     <% if (transactions) { %> 
                         <% transactions.forEach((transaction)=> { %>
                         <% var otherProduct = transaction.user1._id == user._id? transaction.product2: transaction.product1%>
+                        <% var currentlySelected = transaction._id == selectedTransaction?._id%>
                         <div class="transaction-list-item" id="<%= transaction._id %>">
                             <!-- indicator -->
                             <% if (transaction.status == "active") { %>
@@ -45,8 +46,14 @@
                             </div>
                             </div>
                             <!-- product name -->
-                            <div class="d-flex align-items-center">
-                                <div><%= otherProduct.name %></div>
+                            <div class="d-flex align-items-center product-name-container">
+                                <% if (currentlySelected) { %>
+                                <b>
+                                <% } %>
+                                <div class="product-name"><%= otherProduct.name %></div>
+                                <% if (currentlySelected) { %>
+                                </b>
+                                <% } %>
                             </div>
                         </div>
                         <% }) %> 
@@ -66,13 +73,13 @@
                         <div class="transaction-details-progress mt-3">
                             <b>Current status:</b>
                             <div class="progress">
-                            <% if (selectedTransaction.status === 'interrupted') { %>
+                            <% if (selectedTransaction?.status === 'interrupted') { %>
                                 <div style="margin: 0 auto">Interrupted</div>
-                            <% } else if (selectedTransaction.status === 'active') { %>
+                            <% } else if (selectedTransaction?.status === 'active') { %>
                                     <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Active</div>
-                            <% } else if (selectedTransaction.status.startsWith('pending')) { %>
+                            <% } else if (selectedTransaction?.status.startsWith('pending')) { %>
                                     <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated active" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">Pending</div>
-                            <% } else if (selectedTransaction.status === 'finished') { %>
+                            <% } else if (selectedTransaction?.status === 'finished') { %>
                                 <div class="progress-bar progress-bar-striped bg-success progress-bar-animated active" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Finish</div>
                             <% } %>
                             </div>
@@ -82,15 +89,15 @@
                             <b>Product:</b>
                             <div class="row">
                                 <div class="col d-flex justify-content-center align-items-center flex-column">
-                                    <img class="trade-item1" src="<%= selectedTransaction.product1.imageUrl %>" alt="<%= selectedTransaction.product1.name %>">
-                                    <div>$<%= selectedTransaction.product1.price %></div>
+                                    <img class="trade-item1" src="<%= selectedTransaction?.product1.imageUrl %>" alt="<%= selectedTransaction?.product1.name %>">
+                                    <div>$<%= selectedTransaction?.product1.price %></div>
                                 </div>
                                 <div class="col trade-icon d-flex justify-content-center align-items-center">
                                     <i class="bi bi-arrow-left-right" style="font-size: 50px"></i>
                                 </div>
                                 <div class="col d-flex justify-content-center align-items-center flex-column">
-                                    <img class="trade-item2" src="<%= selectedTransaction.product2.imageUrl %>" alt="<%= selectedTransaction.product2.name %>">
-                                    <div>$<%= selectedTransaction.product2.price %></div>
+                                    <img class="trade-item2" src="<%= selectedTransaction?.product2.imageUrl %>" alt="<%= selectedTransaction?.product2.name %>">
+                                    <div>$<%= selectedTransaction?.product2.price %></div>
                                 </div>
                             </div>
                         </div>
@@ -106,33 +113,33 @@
                                             <i class="bi bi-person d-flex align-items-center" style="font-size: 100px"></i>
                                         </div>
                                         <div>
-                                        <% if (selectedTransaction.user1.name == user.name) { %>
-                                            <b style="display: block">Name: <%= selectedTransaction.user2.name %></b>
-                                            <b style="display: block">Email: <%= selectedTransaction.user2.email %></b>
+                                        <% if (selectedTransaction?.user1.name == user.name) { %>
+                                            <b style="display: block">Name: <%= selectedTransaction?.user2.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction?.user2.email %></b>
                                         <% } else  { %>
-                                            <b style="display: block">Name: <%= selectedTransaction.user1.name %></b>
-                                            <b style="display: block">Email: <%= selectedTransaction.user1.email %></b>
+                                            <b style="display: block">Name: <%= selectedTransaction?.user1.name %></b>
+                                            <b style="display: block">Email: <%= selectedTransaction?.user1.email %></b>
                                         <% } %>
                                         
                                     </div>
                                 </div>    
                             </div>
                             <div class="col">                    
-                                <% if ((selectedTransaction.status == 'pending_user1' && !selectedTransaction.isUser1) || 
-                                    (selectedTransaction.status == 'pending_user2' && selectedTransaction.isUser1)
+                                <% if ((selectedTransaction?.status == 'pending_user1' && !selectedTransaction?.isUser1) || 
+                                    (selectedTransaction?.status == 'pending_user2' && selectedTransaction?.isUser1)
                                     ) { %>
                                     Waiting for the other user
-                                <% } else if (selectedTransaction.status === "finished") { %>      
-                                    <% if (selectedTransaction.isUser1) { %>
-                                        <% var ourRating = selectedTransaction.rating1 %>
-                                        <% var ourReview = selectedTransaction.review1 %>
-                                        <% var otherRating = selectedTransaction.rating2 %>
-                                        <% var otherReview = selectedTransaction.review2 %>
+                                <% } else if (selectedTransaction?.status === "finished") { %>      
+                                    <% if (selectedTransaction?.isUser1) { %>
+                                        <% var ourRating = selectedTransaction?.rating1 %>
+                                        <% var ourReview = selectedTransaction?.review1 %>
+                                        <% var otherRating = selectedTransaction?.rating2 %>
+                                        <% var otherReview = selectedTransaction?.review2 %>
                                     <% } else { %>
-                                        <% var ourRating = selectedTransaction.rating2 %>
-                                        <% var ourReview = selectedTransaction.review2 %>
-                                        <% var otherRating = selectedTransaction.rating1%>
-                                        <% var otherReview = selectedTransaction.review1%>
+                                        <% var ourRating = selectedTransaction?.rating2 %>
+                                        <% var ourReview = selectedTransaction?.review2 %>
+                                        <% var otherRating = selectedTransaction?.rating1%>
+                                        <% var otherReview = selectedTransaction?.review1%>
                                     <% } %>
                                     
                                     <b>
@@ -161,7 +168,7 @@
                                         data-bs-toggle="modal" data-bs-target="#reviewModal">
                                         Leave a review
                                     </button>
-                                <% } else if (selectedTransaction.status == 'interrupted'){ %> 
+                                <% } else if (selectedTransaction?.status == 'interrupted'){ %> 
                                     <b style="display: block">Action:</b>
                                     <br>
                                     <button 
@@ -186,7 +193,7 @@
                         </div>
                     </div>
                     <% } else { %>
-                        <div class="container mt-5">
+                        <div class="container mt-5 mb-5">
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <p class="lead">Select a transaction to view details!</p>
