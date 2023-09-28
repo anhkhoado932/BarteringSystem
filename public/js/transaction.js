@@ -209,4 +209,23 @@ $(document).ready(function () {
         });
     });
 
+    $('#statusFilter').on('change', function() {
+        var selectedValue = $(this).val();
+        var url = new URL(window.location.href);
+
+        // Update or add the statusFilter query parameter
+        if (selectedValue !== 'all') {
+            url.searchParams.set('statusFilter', selectedValue);
+        } else {
+            // If "All" is selected, remove the statusFilter query parameter
+            url.searchParams.delete('statusFilter');
+        }
+
+        window.location.href = url;
+    });
+
+    var currentStatusFilter = new URLSearchParams(window.location.search).get('statusFilter');
+    if (currentStatusFilter) {
+        $('#statusFilter').val(currentStatusFilter);
+    }
 });
