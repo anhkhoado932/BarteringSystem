@@ -4,33 +4,37 @@ const transactionModel = require('../models/transaction');
 
 exports.getTransaction = async (req, res) => {
     const user = req.session.user;
-    const { _id } = user;
-    const selectedTransactionId = req.query.transactionId ?? null;
+    const userId = user._id;
+    const selectedTransactionId = req.query.transactionId || null;
+    const statusFilter = req.query.statusFilter || null;
+
     const filter = {
-        $or: [{ user1: _id }, { user2: _id }],
+        $or: [{ user1: userId }, { user2: userId }],
     };
 
-    // Add status filter if exist
-    if (req.query.statusFilter === 'pending') {
-        filter['status'] = /^pending.*$/;
-    } else if (req.query.statusFilter in ['active', 'interrupted', 'finish']) {
-        filter['status'] = req.query.statusFilter;
+    // Add status filter if it exists
+    if (statusFilter === 'pending') {
+        filter['status'] = /^pending.*/;
+    } else if (['active', 'interrupted', 'finished'].includes(statusFilter)) {
+        filter['status'] = statusFilter;
     }
 
     try {
         const transactions = await transactionModel
             .find(filter)
-            .populate('user1')
-            .populate('user2')
-            .populate('product1')
-            .populate('product2')
+            .populate('user1 user2 product1 product2')
             .lean();
 
+        // Find the selected transaction
         const selectedTransaction = transactions.find(
-            (e) => e._id.toString() == selectedTransactionId
+            (transaction) =>
+                transaction._id.toString() === selectedTransactionId
         );
+
+        // Determine if the user is associated with user1 in the selected transaction
         if (selectedTransaction) {
-            selectedTransaction['isUser1'] = (selectedTransaction['user1']._id == _id);
+            selectedTransaction['isUser1'] =
+                selectedTransaction.user1._id.equals(userId);
             req.session.selectedTransactionId = selectedTransactionId;
         }
 
