@@ -26,7 +26,9 @@
                 
                     <% if (transactions) { %> 
                         <% transactions.forEach((transaction)=> { %>
+                        <% var otherProduct = transaction.user1._id == user._id? transaction.product2: transaction.product1%>
                         <div class="transaction-list-item" id="<%= transaction._id %>">
+                            <!-- indicator -->
                             <% if (transaction.status == "active") { %>
                                 <span class="transaction-indicator bg-warning"></span>
                             <% } else if (transaction.status == "finished") { %>
@@ -36,15 +38,15 @@
                             <% } else { %>
                                 <span class="transaction-indicator bg-warning"></span>
                             <% } %>
-                            <div class="rounded-circle border d-flex justify-content-center align-items-center avatar">
-                                <i class="bi bi-person d-flex align-items-center"></i>
+                            <!-- product image -->
+                            <div class="rounded-circle border d-flex justify-content-center align-items-center avatar" style="position: relative">
+                                <div class="product-icon">
+                                <img src="<%= otherProduct.imageUrl %>" alt="User Image" class="img-fluid" />
                             </div>
+                            </div>
+                            <!-- product name -->
                             <div class="d-flex align-items-center">
-                                <% if (transaction.user1.name == user.name) { %>
-                                    <b><%= transaction.user2?.name %></b>
-                                <% } else  { %>
-                                    <b><%= transaction.user1.name %></b>
-                                <% } %>
+                                <div><%= otherProduct.name %></div>
                             </div>
                         </div>
                         <% }) %> 
@@ -97,7 +99,7 @@
                             <div class="row">
                                 <div class="col transaction-details-baterer">
                                     <b>
-                                        Other user information:
+                                       User information:
                                     </b>
                                     <div class="d-flex mt-1">
                                         <div class="rounded-circle border d-flex justify-content-center align-items-center large-avatar">
