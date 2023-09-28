@@ -52,7 +52,51 @@
 Batering system finds your precious used items a new owner! Simply upload any valuable goods, and we will guarantee the best trade you can get
 
 <h2 id="documentations">Documentations</h2>
+<!-- guys please add here -->
 <h3 id="transation">Transaction</h3>
+
+**Creating a new transaction**
+- In the item tab, select an item you wish to barter
+- Click on the item to view details. At the bottom, **Start Transaction** button will appear
+- On click, user will be prompt with a list of their own items. User can select an item to start bartering
+![Alt text](misc/start-transaction.png)
+
+**View transactions list**
+- Select the **transaction** tab in navbar. User will be redirected to the transaction page
+- Here, user can view all past and current transaction on the left panel
+![Alt text](misc/transaction-page.png)
+
+**Filter transactions list**
+- On the top of the left panel, a dropdown is available to filter transaction by status. 
+
+![Alt text](misc/transaction-list-filter.png)
+
+- A transaction can have 4 type of statuses:
+  - **Active**: Transaction is currently in progress
+  - **Pending**: Transaction has been marked as finish by 1 user. The other user must also mark as finish to continue
+  - **Finished**: Transaction has been marked as finished by both user. 
+  - **Interrupted**: Transaction has been marked as canceled by 1 user; alternatively, one of the products in this transaction has become unavailable.
+
+![Alt text](misc/transaction-list-filter-finished.png)
+
+**View transactions details**
+- User can select any transaction from the left panel, which will display that transaction's details: current status of the transaction, item details, barterer information, and transaction actions
+- On the top-left corner, a **View Chat** button will also appear.
+![Alt text](misc/view-transaction-details.png)
+
+**Start chatting**
+- User can click on the **View Chat** button to start messaging other user. This is a two-way real-time chat supported by socket.io
+![Alt text](misc/start-chatting.png)
+
+**Finish transaction**
+TODO
+**Cancel Transaction**
+- In transaction detail view, user can press **Cancel** button to disrupt transaction. 
+- This is irriversible, therefore a confirmation prompt for confirmation is displayed
+- On confirm, the transaction will be interrupted
+![Alt text](misc/cancel-prompt.png)
+
+**Review and Rating  post-transaction**
 
 <h2 id="run-the-project-via-command-line">Run the project via command line</h2>
 
