@@ -32,34 +32,42 @@ exports.getTransaction = (req, res) => {
             });
         })
         .catch((err) => {
-            res.status(400).send({ message: err });
+            res.status(500).send({ message: err });
         });
 };
 
 exports.insertTransaction = async (req, res) => {
-    const productId1 = new ObjectId(req.body['productId1']);
-    const productId2 = new ObjectId(req.body['productId2']);
-    const product1 = await productModel.findById(productId1);
-    const product2 = await productModel.findById(productId2);
-    const newTransaction = new transactionModel({
-        product1,
-        product2,
-        user1: product1.owner,
-        user2: product2.owner,
-        status: 'active',
-    });
-    newTransaction
-        .save()
-        .then((transaction) => {
-            res.status(201).send({
-                message: 'Transaction created successfully',
-                data: transaction,
-                redirect: `/transaction?transactionId=${transaction._id.toString()}`,
-            });
-        })
-        .catch((err) => {
-            res.status(400).send({ message: err });
+    try {
+        // Find product1 and product2
+        const productId1 = new ObjectId(req.body['productId1']);
+        const productId2 = new ObjectId(req.body['productId2']);
+        const [product1, product2] = await Promise.all([
+            productModel.findById(productId1),
+            productModel.findById(productId2)
+        ]);
+        if (!product1 || !product2) {
+            return res.status(404).send({ message: 'One or both products not found' });
+        }
+
+        // Create new transaction
+        const newTransaction = new transactionModel({
+            product1,
+            product2,
+            user1: product1.owner,
+            user2: product2.owner,
+            status: 'active',
         });
+        
+        await newTransaction.save();
+        res.status(201).send({
+            message: 'Transaction created successfully',
+            data: newTransaction,
+            redirect: `/transaction?transactionId=${newTransaction._id.toString()}`,
+        });
+    } catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+    
 };
 
 exports.updateTransaction = async (req, res) => {
@@ -73,7 +81,7 @@ exports.updateTransaction = async (req, res) => {
         );
         res.status(200).send(transaction);
     } catch (error) {
-        res.status(400).send({ message: error.message });
+        res.status(500).send("Internal Server Error");
     }
 };
 
@@ -85,7 +93,7 @@ exports.deleteTransaction = (req, res) => {
             res.status(200).send(result);
         })
         .catch((err) => {
-            res.status(400).send({ message: err });
+            res.status(500).send('Internal Server Error');
         });
 };
 
@@ -131,7 +139,6 @@ exports.finishTransaction = async (req, res) => {
             );
         }
     } catch (err) {
-        // Handle errors and send an error response with a status code
         res.status(500).json({
             error: 'Failed to finish the transaction',
             message: err.message,
@@ -149,7 +156,7 @@ exports.cancelTransaction = async (req, res) => {
 
         res.status(200).send({"message": "transaction status is updated"});
     } catch (err) {
-        res.status(400).json({
+        res.status(500).json({
             error: 'Failed to cancel the transaction',
             message: err.message,
         });
