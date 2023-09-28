@@ -85,16 +85,18 @@ exports.updateTransaction = async (req, res) => {
     }
 };
 
-exports.deleteTransaction = (req, res) => {
+exports.deleteTransaction = async (req, res) => {
     const transactionId = new ObjectId(req.params.id);
-    transactionModel
-        .deleteOne({ _id: transactionId })
-        .then((result) => {
-            res.status(200).send(result);
-        })
-        .catch((err) => {
-            res.status(500).send('Internal Server Error');
-        });
+    try {
+        const result = await transactionModel.deleteOne({ _id: transactionId });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).send({ message: 'Transaction not found' });
+        }
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
 };
 
 exports.finishTransaction = async (req, res) => {
