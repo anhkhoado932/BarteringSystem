@@ -7,9 +7,16 @@ $(document).ready(function () {
 
     messageBtn.on('click', toggleChatbox);
 
+    // On selecting a new transaction to view detail
     $('.transaction-list-item').on('click', function () {
         const transactionId = $(this).attr('id');
-        window.location.href = `/transaction?transactionId=${transactionId}`;
+        
+        // Set or update the 'transactionId' query parameter in the URL
+        const newHref = new URL(window.location.href);
+        newHref.searchParams.set('transactionId', transactionId);
+
+        // Reload the page with new URL
+        window.location.href = newHref;
     });
 
     function toggleChatbox(event) {
@@ -58,25 +65,24 @@ $(document).ready(function () {
     }
 
     function renderToggleButton(isOpening) {
-            const iconClass = isOpening
-                ? 'bi bi-chevron-double-left'
-                : 'bi bi-chevron-double-right';
+        const iconClass = isOpening
+            ? 'bi bi-chevron-double-left'
+            : 'bi bi-chevron-double-right';
 
-            messageBtn.html(`
+        messageBtn.html(`
                 <i class="${iconClass}"></i>
                 ${isOpening ? 'View Details' : 'View Chat'}
             `);
 
-            $('.transaction-details-items .col.trade-icon').html(
-                isOpening
-                    ? '<i class="bi bi-arrow-down-up" style="font-size: 30px"></i>'
-                    : '<i class="bi bi-arrow-left-right" style="font-size: 50px"></i>'
-            );
+        $('.transaction-details-items .col.trade-icon').html(
+            isOpening
+                ? '<i class="bi bi-arrow-down-up" style="font-size: 30px"></i>'
+                : '<i class="bi bi-arrow-left-right" style="font-size: 50px"></i>'
+        );
 
-            setTimeout(() => {
-                $('.transaction-details-items .col').toggleClass('col-12');
-            }, 100);
-
+        setTimeout(() => {
+            $('.transaction-details-items .col').toggleClass('col-12');
+        }, 100);
     }
 
     socket.on('new-message', (data) => {
@@ -155,14 +161,14 @@ $(document).ready(function () {
 
     $('.transaction-confirm-delete-btn').on('click', function () {
         const transactionId = getTransactionIdFromUrl();
-        
+
         $.ajax({
             url: `/transaction/${transactionId}`,
-            type: "DELETE", 
+            type: 'DELETE',
             success: (data) => {
                 window.location.reload();
             },
-        })
+        });
         $('#confirmDelete').modal('hide');
     });
 
@@ -179,37 +185,37 @@ $(document).ready(function () {
         $('#confirmCancel').modal('hide');
     }
 
-    $("#submitReview").on('click', function (e) {
+    $('#submitReview').on('click', function (e) {
         e.preventDefault();
 
         const transactionId = getTransactionIdFromUrl();
-        const isUser1 = $("#isUser1").attr('data') == 'true';
-        const reviewData = {}
-        console.log(isUser1)
-        console.log(typeof isUser1)
+        const isUser1 = $('#isUser1').attr('data') == 'true';
+        const reviewData = {};
+        console.log(isUser1);
+        console.log(typeof isUser1);
         if (isUser1) {
-            reviewData['review1'] = $("#review").val();
-            reviewData['rating1'] = $("#rating").val();
+            reviewData['review1'] = $('#review').val();
+            reviewData['rating1'] = $('#rating').val();
         } else {
-            reviewData['review2'] = $("#review").val();
-            reviewData['rating2'] = $("#rating").val();
+            reviewData['review2'] = $('#review').val();
+            reviewData['rating2'] = $('#rating').val();
         }
-        console.log(reviewData)
+        console.log(reviewData);
         $.ajax({
-            type: "PUT",
-            url: `/transaction/${transactionId}`, 
+            type: 'PUT',
+            url: `/transaction/${transactionId}`,
             data: reviewData,
             success: function (data) {
-                console.log("Review submitted successfully:", data);
+                console.log('Review submitted successfully:', data);
                 $('#reviewModal').modal('hide');
             },
             error: function (error) {
-                console.error("Error submitting review:", error);
-            }
+                console.error('Error submitting review:', error);
+            },
         });
     });
 
-    $('#statusFilter').on('change', function() {
+    $('#statusFilter').on('change', function () {
         var selectedValue = $(this).val();
         var url = new URL(window.location.href);
 
@@ -224,7 +230,9 @@ $(document).ready(function () {
         window.location.href = url;
     });
 
-    var currentStatusFilter = new URLSearchParams(window.location.search).get('statusFilter');
+    var currentStatusFilter = new URLSearchParams(window.location.search).get(
+        'statusFilter'
+    );
     if (currentStatusFilter) {
         $('#statusFilter').val(currentStatusFilter);
     }
