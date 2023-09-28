@@ -2,38 +2,46 @@ const ObjectId = require('mongodb').ObjectId;
 const productModel = require('../models/product');
 const transactionModel = require('../models/transaction');
 
-exports.getTransaction = (req, res) => {
+exports.getTransaction = async (req, res) => {
     const user = req.session.user;
     const { _id } = user;
-    transactionModel
-        .find({
-            $or: [{ user1: _id }, { user2: _id }],
-        })
-        .populate('user1', 'name email')
-        .populate('user2', 'name email')
-        .populate('product1', 'name imageUrl price')
-        .populate('product2', 'name imageUrl price')
-        .lean()
-        .then((transactions) => {
-            transactions.sort(compareTransactionByStatus);
-            const selectedId = req.query.transactionId ?? null;
-            req.session.selectedTransactionId = selectedId;
-            const selectedTransaction = transactions.find(
-                (e) => e._id.toString() == selectedId
-            );
-            if (selectedTransaction) {
-                selectedTransaction['isUser1'] =
-                    selectedTransaction['user1']._id == _id;
-            }
-            res.render('transaction', {
-                transactions,
-                user,
-                selectedTransaction,
-            });
-        })
-        .catch((err) => {
-            res.status(500).send({ message: err });
+    const selectedTransactionId = req.query.transactionId ?? null;
+    const filter = {
+        $or: [{ user1: _id }, { user2: _id }],
+    };
+
+    // Add status filter if exist
+    if (req.query.statusFilter === 'pending') {
+        filter['status'] = /^pending.*$/;
+    } else if (req.query.statusFilter in ['active', 'interrupted', 'finish']) {
+        filter['status'] = req.query.statusFilter;
+    }
+
+    try {
+        const transactions = await transactionModel
+            .find(filter)
+            .populate('user1')
+            .populate('user2')
+            .populate('product1')
+            .populate('product2')
+            .lean();
+
+        const selectedTransaction = transactions.find(
+            (e) => e._id.toString() == selectedTransactionId
+        );
+        if (selectedTransaction) {
+            selectedTransaction['isUser1'] = (selectedTransaction['user1']._id == _id);
+            req.session.selectedTransactionId = selectedTransactionId;
+        }
+
+        res.render('transaction', {
+            transactions,
+            user,
+            selectedTransaction,
         });
+    } catch (err) {
+        res.status(500).send('Internal Server Error');
+    }
 };
 
 exports.insertTransaction = async (req, res) => {
@@ -43,10 +51,12 @@ exports.insertTransaction = async (req, res) => {
         const productId2 = new ObjectId(req.body['productId2']);
         const [product1, product2] = await Promise.all([
             productModel.findById(productId1),
-            productModel.findById(productId2)
+            productModel.findById(productId2),
         ]);
         if (!product1 || !product2) {
-            return res.status(404).send({ message: 'One or both products not found' });
+            return res
+                .status(404)
+                .send({ message: 'One or both products not found' });
         }
 
         // Create new transaction
@@ -57,7 +67,7 @@ exports.insertTransaction = async (req, res) => {
             user2: product2.owner,
             status: 'active',
         });
-        
+
         await newTransaction.save();
         res.status(201).send({
             message: 'Transaction created successfully',
@@ -65,9 +75,8 @@ exports.insertTransaction = async (req, res) => {
             redirect: `/transaction?transactionId=${newTransaction._id.toString()}`,
         });
     } catch (err) {
-        res.status(500).send("Internal Server Error");
+        res.status(500).send('Internal Server Error');
     }
-    
 };
 
 exports.updateTransaction = async (req, res) => {
@@ -81,7 +90,7 @@ exports.updateTransaction = async (req, res) => {
         );
         res.status(200).send(transaction);
     } catch (error) {
-        res.status(500).send("Internal Server Error");
+        res.status(500).send('Internal Server Error');
     }
 };
 
@@ -108,16 +117,17 @@ exports.finishTransaction = async (req, res) => {
             await transactionModel.findById(transactionId);
         const isUser1 = currentTransaction.user1._id == _id;
 
-        if (currentTransaction.status.startsWith('pending')) {
-            currentTransaction.status = 'finished';
-        } else if (currentTransaction.status == 'active') {
+        // Update transaction status
+        if (currentTransaction.status == 'active') {
             currentTransaction.status = isUser1
                 ? 'pending_user2'
                 : 'pending_user1';
+        } else if (currentTransaction.status.startsWith('pending')) {
+            currentTransaction.status = 'finished';
         }
         await currentTransaction.save();
 
-        res.status(200).send({"message": "transaction status is updated"});
+        res.status(200).send({ message: 'transaction status is updated' });
 
         // Cancel all transactions involving the same products if this transaction is finished
         if (currentTransaction.status == 'finished') {
@@ -156,7 +166,7 @@ exports.cancelTransaction = async (req, res) => {
             status: 'interrupted',
         });
 
-        res.status(200).send({"message": "transaction status is updated"});
+        res.status(200).send({ message: 'transaction status is updated' });
     } catch (err) {
         res.status(500).json({
             error: 'Failed to cancel the transaction',
@@ -164,20 +174,3 @@ exports.cancelTransaction = async (req, res) => {
         });
     }
 };
-
-function compareTransactionByStatus(transaction1, transaction2) {
-    // TODO: create TransactionStatus schema in the future
-    const statusEnum = {
-        active: 0,
-        pending: 1,
-        finished: 2,
-        interrupted: 3,
-    };
-
-    const status1 = transaction1.status;
-    const status2 = transaction2.status;
-    if (!(status1 in statusEnum) || !(status2 in statusEnum)) {
-        return -1;
-    }
-    return statusEnum[status1] < statusEnum[status2];
-}
