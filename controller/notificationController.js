@@ -1,27 +1,32 @@
-const Notification = require('../models/notification');
+const WelcomeMessage = require('../models/notification');
 
 exports.getLatestNotification = async (req, res) => {
-    // console.log("Session data:", req.session);
     try {
+        if (!req.session || !req.session.user) {
+            return res.status(400).json({ message: 'User not found in session' });
+        }
+
         if (req.session.hasDisplayedNotification) {
             return res.json({ message: "No active notifications" });
         }
 
-        const latestNotification = await Notification.findOne({ active: true }).sort({ date: -1 });
+        const latestNotification = await WelcomeMessage.findOne().sort({ date: -1 });
         console.log("Latest Notification:", latestNotification);
-        const message = latestNotification ? latestNotification.message : "No active notifications";
-        console.log("Message:", message);
 
-        if (message !== "No active notifications" || req.session.welcomeMessage) {
+        const welcomeMessage = await WelcomeMessage.findOne({ userId: req.session.user._id });
+
+        if (latestNotification || welcomeMessage) {
             req.session.hasDisplayedNotification = true;
-            console.log("Set hasDisplayedNotification to true");
         }
+
         res.json({
-            message: message,
-            welcomeMessage: req.session.welcomeMessage // get the message
+            message: latestNotification ? latestNotification.message : null,
+            welcomeMessage: welcomeMessage ? welcomeMessage.message : null
         });
-        delete req.session.welcomeMessage; // avoid message display again and again
+
+        // if (welcomeMessage) await welcomeMessage.delete();
     } catch (error) {
-        res.status(500).send({ message: "Internal Server Error" });
+        console.error('Error in getLatestNotification:', error);
+        res.status(500).send({ message: "Internal Server Error", error: error.message });
     }
 };
