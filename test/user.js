@@ -22,17 +22,6 @@ describe('Testing', function () {
         await agent.close();
     });
 
-    // TODO
-    // describe('Admin page', function () {
-    //     it('Admin can see product and feedback lists', async function () {
-    //         const res = await agent.get('/admin');
-    //         console.log(res)
-    //         expect(res).to.have.status(200);
-    //         expect(res.body).to.have.property('products').that.is.an('array');
-    //         expect(res.body).to.have.property('feedbacks').that.is.an('array');
-    //     });
-    // });
-
     describe('User Controller', function () {
         it('Register a user', function (done) {
             agent
@@ -90,5 +79,5 @@ describe('Testing', function () {
                 .to.have.property('message')
                 .to.equal('Login successful.');
         });
-    }); 
+    });
 });
