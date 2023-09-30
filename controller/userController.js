@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const WelcomeMessage = require('../models/notification');
 
 exports.registerUser = async (req, res) => {
     try {
@@ -59,12 +60,19 @@ exports.loginUser = async (req, res) => {
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
             req.session.user = user;
-            //use session to store whether the notification has displayed or not
+
             //For the first time user login, the value is always false.
             req.session.hasDisplayedNotification = false;
 
-            // Store welcome message in the session
-            req.session.welcomeMessage = `Welcome, ${user.name}!`;
+            // Create welcome message
+            const welcomeMessageText = `Welcome, ${user.name}!`;
+            let welcomeMessage = await WelcomeMessage.findOne({ userId: user._id });
+            if (!welcomeMessage) {
+                welcomeMessage = new WelcomeMessage({ userId: user._id, message: welcomeMessageText });
+            } else {
+                welcomeMessage.message = welcomeMessageText;
+            }
+            await welcomeMessage.save();
 
             // Check if testing mode is on
             if (req.body.testing === 'true') {
