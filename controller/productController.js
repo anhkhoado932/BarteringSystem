@@ -30,6 +30,7 @@ exports.uploadProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
+        console.log("deleteProduct called");
         const productId = req.params.id;
         await Product.findByIdAndDelete(productId);
         res.status(200).send({ message: "Product deleted successfully" });
@@ -66,7 +67,7 @@ exports.getProducts = async (req, res) => {
         filter['owner'] = { $ne: req.session.user._id };
         let user = req.session.user;
         let products = await Product.find(filter).populate('owner');
-        res.render('product', {
+        res.json('product', {
             products: products,
             user: user,
             priceRange: req.query.priceRange || 'all'
@@ -82,19 +83,21 @@ exports.getProductsByUser = async (req, res) => {
     Product
         .find({ owner: _id })
         .then((products) => {
-            res.status(200).send(products);
+            res.status(200).json(products);
         })
 }
 
 exports.addToFavorites = async (req, res) => {
     const productId = req.body.productId;
     const userId = req.session.user._id;
-
+    console.log('addToFavorites called:', productId, userId);
     try {
         const user = await User.findById(userId);
         if (!user.favorites.includes(productId)) {
             user.favorites.push(productId);
             await user.save();
+            const updatedUser = await User.findById(userId);
+            console.log(updatedUser.favorites);
         }
         res.json({ success: true });
     } catch (error) {
