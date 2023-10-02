@@ -56,8 +56,6 @@
             }
             $(document).ready(function () {
                 var popover = new bootstrap.Popover($('#start-transaction-popover'));
-            })
-            $(document).ready(function () {
                 $("#start-transaction-popover").popover({
                     trigger: "click",
                     html: true,
@@ -80,6 +78,7 @@
                         bootstrap.Popover.getInstance(popoverButton).dispose();
                         // append new popover
                         const newPopover = new bootstrap.Popover(popoverButton, {
+                            trigger: "click",
                             html: true,
                             sanitize: false
                         });
@@ -89,7 +88,7 @@
                     complete: (data) => {
                         const popoverButton = $('#start-transaction-popover');
                         const content = data.responseJSON?.map((product) => `
-                            <div class="mb-4">
+                            <div class="popover-item mb-4">
                                 <div style="cursor: pointer">
                                     <a onclick={onStartTransaction('${product._id}')}>
                                         <img src="${product.imageUrl}" class="card-img-top card-img-top-popover" alt="${product.name}">
@@ -109,6 +108,7 @@
                         bootstrap.Popover.getInstance(popoverButton).dispose();
                         // append new popover
                         const newPopover = new bootstrap.Popover(popoverButton, {
+                            trigger: "click",
                             html: true,
                             sanitize: false
                         });
