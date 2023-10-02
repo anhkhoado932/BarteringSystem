@@ -59,19 +59,22 @@ exports.loginUser = async (req, res) => {
         const user = await User.findOne({ email: req.body.email });
 
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
-            req.session.user = user;
+            // Reset the hasSeenWelcomeMessage flag
+            user.hasSeenWelcomeMessage = false;
+            await user.save();
 
-            //For the first time user login, the value is always false.
-            req.session.hasDisplayedNotification = false;
+            req.session.user = user;
 
             // Create welcome message
             const welcomeMessageText = `Welcome, ${user.name}!`;
+
             let welcomeMessage = await WelcomeMessage.findOne({ userId: user._id });
             if (!welcomeMessage) {
                 welcomeMessage = new WelcomeMessage({ userId: user._id, message: welcomeMessageText });
             } else {
                 welcomeMessage.message = welcomeMessageText;
             }
+            console.log('Welcome Message:', welcomeMessage);
             await welcomeMessage.save();
 
             // Check if testing mode is on
