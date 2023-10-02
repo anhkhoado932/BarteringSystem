@@ -64,7 +64,7 @@ exports.insertTransaction = async (req, res) => {
         }
 
         // If the transaction already exist, redirect to that transaction
-        const transactionCheck = transactionModel.find({
+        const transactionCheck = await transactionModel.findOne({
             $or: [
                 {product1: productId1, product2: productId2},
                 {product1: productId2, product2: productId1}
