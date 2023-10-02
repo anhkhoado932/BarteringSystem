@@ -168,8 +168,24 @@ git checkout <branch-name>
 
 - After you have **finished** the task, go to Github and create a pull request
 - **Don't** work on the branch after it has been merged.
+
+<h3 id="step-3-pull-requests">Testing</h3>
+
+Run all tests
+```
+npm test
+```
+
+Run only unit tests
+```
+npm test:unit
+```
+
+Run only end to end test
+```
+npm test:e2e
+```
+
 ## Resources
 
 -   [Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
--   [How to write better commit message](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
--   [Clean code book summary](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29)

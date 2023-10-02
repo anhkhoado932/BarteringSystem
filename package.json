@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha ./test/*.js"
+    "test": "mocha ./test/**/*.js",
+    "test:unit": "mocha ./test/*.js",
+    "test:e2e": "mocha ./test/e2e/*.js"
   },
   "author": "Khoa, Nate, Eisen, Bruce, Christina",
   "license": "ISC",
