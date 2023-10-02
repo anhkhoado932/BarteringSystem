@@ -67,7 +67,7 @@ exports.getProducts = async (req, res) => {
         filter['owner'] = { $ne: req.session.user._id };
         let user = req.session.user;
         let products = await Product.find(filter).populate('owner');
-        res.json('product', {
+        res.render('product', {
             products: products,
             user: user,
             priceRange: req.query.priceRange || 'all'
@@ -83,7 +83,7 @@ exports.getProductsByUser = async (req, res) => {
     Product
         .find({ owner: _id })
         .then((products) => {
-            res.status(200).json(products);
+            res.status(200).render(products);
         })
 }
 
