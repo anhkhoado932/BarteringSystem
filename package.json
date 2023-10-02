@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "mocha ./test/*.js",
+    "cypress:open": "cypress open",
     "test:e2e": "cypress run --spec ./test/e2e/*.js"
   },
   "author": "Khoa, Nate, Eisen, Bruce, Christina",
