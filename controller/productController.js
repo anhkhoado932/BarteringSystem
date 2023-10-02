@@ -83,7 +83,7 @@ exports.getProductsByUser = async (req, res) => {
     Product
         .find({ owner: _id })
         .then((products) => {
-            res.status(200).render(products);
+            res.status(200).json(products);
         })
 }
 
