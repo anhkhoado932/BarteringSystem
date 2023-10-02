@@ -63,6 +63,19 @@ exports.insertTransaction = async (req, res) => {
                 .send({ message: 'One or both products not found' });
         }
 
+        // If the transaction already exist, redirect to that transaction
+        const transactionCheck = await transactionModel.findOne({
+            $or: [
+                {product1: productId1, product2: productId2},
+                {product1: productId2, product2: productId1}
+            ]
+        })
+        if (transactionCheck) {
+            return res.status(200).send({
+                redirect: `/transaction?transactionId=${transactionCheck._id.toString()}`,
+            })
+        }
+
         // Create new transaction
         const newTransaction = new transactionModel({
             product1,

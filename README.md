@@ -11,13 +11,7 @@
       <li><a href="#start-project">Start project</a></li>
     </ol>
   </li>
-    <li>
-    <a href="#documentations">Documentations</a>
-    <ol>
-      <!-- Eisen, Christina, Bruce, Nate: Please add your sections here  -->
-      <li><a href="#transaction">Transaction</a></li>
-    </ol>
-  </li>
+    
   <li>
     <a href="#run-the-project-via-docker">Run the project via Docker</a>
     <ol>
@@ -26,11 +20,19 @@
     </ol>   
   </li>
   <li>
+    <a href="#documentations">Documentations</a>
+    <ol>
+      <!-- Eisen, Christina, Bruce, Nate: Please add your sections here  -->
+      <li><a href="#transaction">Transaction</a></li>
+    </ol>
+  </li>
+  <li>
     <a href="#developing-new-features-for-khoa-eisen-bruce-christina-nate">For developers</a>
     <ol>
       <li><a href="#step-1-make-sure-the-project-is-cloned-and-installed">Step 1: Make sure the project is cloned and installed</a></li>
       <li><a href="#step-2-create-feature-branch">Step 2: Create feature branch</a></li>
       <li><a href="#step-3-pull-requests">Step 3: Pull Requests</a></li>
+      <li><a href="#step-3-testing">Testing</a></li>
     </ol>
   </li>
   <li>
@@ -168,8 +170,23 @@ git checkout <branch-name>
 
 - After you have **finished** the task, go to Github and create a pull request
 - **Don't** work on the branch after it has been merged.
+
+<h3 id="step-4-testing">Testing</h3>
+
+Run unit tests
+```
+npm test
+```
+
+Run end to end test (headless)
+```
+npm run test:e2e
+```
+
+Run end to end test (within browser)
+```
+npm run cypress:open
+```
 ## Resources
 
 -   [Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
--   [How to write better commit message](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
--   [Clean code book summary](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29)
