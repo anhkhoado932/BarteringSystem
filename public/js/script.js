@@ -11,9 +11,7 @@ $(document).ready(function () {
             url: '/notifications/latest',
             method: 'GET',
             success: function (response) {
-                if (response && response.message && response.message !== "No active notifications") {
-                    displayNotification(response.message);
-                } else if (response && response.welcomeMessage) {
+                if (response && response.welcomeMessage) {
                     displayNotification(response.welcomeMessage);
                 }
             },
