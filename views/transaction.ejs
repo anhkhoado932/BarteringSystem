@@ -48,12 +48,10 @@
                             <!-- product name -->
                             <div class="d-flex align-items-center product-name-container">
                                 <% if (currentlySelected) { %>
-                                <b>
-                                <% } %>
-                                <div class="product-name"><%= otherProduct.name %></div>
-                                <% if (currentlySelected) { %>
-                                </b>
-                                <% } %>
+                                    <div class="product-name selected" ><%= otherProduct.name %></div>
+                                <% } else { %>
+                                    <div class="product-name" ><%= otherProduct.name %></div>
+                                <%  } %>
                             </div>
                         </div>
                         <% }) %> 
