@@ -85,6 +85,7 @@ $(document).ready(function () {
         }, 100);
     }
 
+    // On sending new messages
     socket.on('new-message', (data) => {
         renderMessages(data.message);
     });
