@@ -90,8 +90,6 @@ Batering system finds your precious used items a new owner! Simply upload any va
 - User can click on the **View Chat** button to start messaging other user. This is a two-way real-time chat supported by socket.io
 ![Alt text](misc/start-chatting.png)
 
-**Finish transaction**
-TODO
 **Cancel Transaction**
 - In transaction detail view, user can press **Cancel** button to disrupt transaction. 
 - This is irriversible, therefore a confirmation prompt for confirmation is displayed
