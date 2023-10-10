@@ -22,8 +22,15 @@
   <li>
     <a href="#documentations">Documentations</a>
     <ol>
-      <!-- Eisen, Christina, Bruce, Nate: Please add your sections here  -->
+      <li><a href="#register">Register</a></li>
+      <li><a href="#login">Login</a></li>
+      <li><a href="#notification">Welcome Message</a></li>
+      <li><a href="#upload">Upload a Product</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+      <li><a href="#filter">Filter</a></li>
+      <li><a href="#favorite">Favorite</a></li>
       <li><a href="#transaction">Transaction</a></li>
+      <li><a href="#admin">Admin</a></li>
     </ol>
   </li>
   <li>
@@ -54,7 +61,72 @@
 Batering system finds your precious used items a new owner! Simply upload any valuable goods, and we will guarantee the best trade you can get
 
 <h2 id="documentations">Documentations</h2>
-<!-- guys please add here -->
+
+<h3 id="register">Register</h3>
+
+**Create a new account**
+- At the home page, click the **Register** button to create a new account.
+- User has to input the email, name and password to complete the register.
+![Alt text](misc/register.jpg)
+
+<h3 id="login">Login</h3>
+
+**Login your account**
+- At the home page, user has to input the email and password collectly to login the account.
+- Click the **Login** button.
+![Alt text](misc/login.jpg)
+
+<h3 id="notification">Welcome Message</h3>
+
+**Welcome Message**
+- When the user login into the website, a welcome message will be displayed at the top of the website.
+![Alt text](misc/welcome-message.jpg)
+
+<h3 id="upload">Upload a Product</h3>
+
+**Upload a product**
+- At the profile page, user can click the **Uploadt** button to upload a product.
+- User has to input the product name, product image, product price and description information.
+- All the products which user has uploaded will be displayed at user profile page.
+![Alt text](misc/upload-a-product.jpg)
+- When the product has been uploaded successful, a notification will be displayed at the top of the website.
+- All the products which user has uploaded will be displayed at user profile page.
+![Alt text](misc/upload-product-successful.jpg)
+
+**Cancel a product**
+- When user wants to cancel the product, he can click the **Cancel** button to cancel.
+- After clicking the **Cancel** button, a notificaiton will be displayed at the top of the website.
+![Alt text](misc/upload-product-cancel.jpg)
+
+<h3 id="feedback">Feedback</h3>
+
+**Send a feedback**
+- At the info page, user can send the feedback about this website.
+- User has to input their email, name, phone number and message, then click the **Send** button to send the feedback.
+![Alt text](misc/feedback.jpg)
+
+<h3 id="filter">Filter</h3>
+
+**Filter the products**
+- At the item page, user can select the price range to find the product more easily.
+![Alt text](misc/filter.jpg)
+
+<h3 id="favorite">Favorite</h3>
+
+**Add to Favorite**
+- At the product detail page, user can click the **Add to Favorites** button to add this product to their favorites.
+- After clicking this button, there is a pop-up window to display the successful message.
+![Alt text](misc/favorite.jpg)
+
+**Find the Favorites**
+- At the profile page, user can find all 'favorites' products.
+![Alt text](misc/favorite-display.jpg)
+
+**Cancel the Favorites**
+- Click the **Cancel** button, user can remove the products from their 'favorites'.
+- There is a notification at the top of the website to display the remove message.
+![Alt text](misc/favorite-cancel.jpg)
+
 <h3 id="transation">Transaction</h3>
 
 **Creating a new transaction**
@@ -97,6 +169,22 @@ Batering system finds your precious used items a new owner! Simply upload any va
 ![Alt text](misc/cancel-prompt.png)
 
 **Review and Rating  post-transaction**
+
+<h3 id="admin">Admin</h3>
+
+**Admin page**
+- Our website has an admin account, when we login this account, the profile will display the admin panel.
+- We can manage the user, product and feedback.
+![Alt text](misc/admin.jpg)
+
+**Edit user and product**
+- If we click the **Edit** button, we can edit the user or product information.
+![Alt text](misc/admin-edit-user.jpg)
+
+**Delete user, product and feedback**
+- If we click the **Delete** button, we can delete the user or product or feedback.
+- There is a delete successful notification after clicking the button.
+![Alt text](misc/admin-cancel.jpg)
 
 <h2 id="run-the-project-via-command-line">Run the project via command line</h2>
 
