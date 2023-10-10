@@ -34,7 +34,7 @@
     </ol>
   </li>
   <li>
-    <a href="#developing-new-features-for-khoa-eisen-bruce-christina-nate">For developers</a>
+    <a href="#for-developers">For developers</a>
     <ol>
       <li><a href="#step-1-make-sure-the-project-is-cloned-and-installed">Step 1: Make sure the project is cloned and installed</a></li>
       <li><a href="#step-2-create-feature-branch">Step 2: Create feature branch</a></li>
@@ -46,8 +46,6 @@
     <a href="#resources">Resources</a>
     <ol>
       <li><a href="#git-branching-model">Git branching model</a></li>
-      <li><a href="#how-to-write-better-commit-message">How to write better commit message</a></li>
-      <li><a href="#clean-code-book-summary">Clean code book summary</a></li>
     </ol>
   </li>
 </ol>
